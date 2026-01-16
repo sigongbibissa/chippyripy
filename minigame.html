@@ -19,7 +19,7 @@
             overflow: hidden; touch-action: none;
         }
         
-        /* 시작 화면 (인트로) */
+        /* 시작 화면 */
         #start-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #fff; z-index: 500;
@@ -62,9 +62,7 @@
         @keyframes shake {
             0% { transform: translate(1px, 1px) rotate(0deg); }
             20% { transform: translate(-3px, 0px) rotate(1deg); }
-            40% { transform: translate(1px, -1px) rotate(1deg); }
-            60% { transform: translate(-1px, 2px) rotate(-1deg); }
-            100% { transform: translate(1px, 1px) rotate(0deg); }
+            100% { transform: translate(0px, 0px) rotate(0deg); }
         }
         .shake { animation: shake 0.4s; }
     </style>
@@ -102,11 +100,10 @@
         const words = ["밤새야지", "취업해야지", "도면 쳐야지", "모형만들어야지", "설계 해야지", "컨펌받아야지", "수정해야지"];
         const isMobile = window.innerWidth <= 768;
 
-        // 게임 초기화 함수
         function initGame() {
-            startScreen.style.display = 'none'; // 시작 화면 제거
-            infoBar.style.opacity = '1';       // 상단 UI 표시
-            startTime = Date.now();            // 시작 시간 기록
+            startScreen.style.display = 'none';
+            infoBar.style.opacity = '1';
+            startTime = Date.now();
 
             if (isMobile) {
                 document.getElementById('mode-text').innerHTML = "해결한 업무: <span id='score-val'>0</span>";
@@ -127,7 +124,7 @@
             document.body.style.backgroundColor = "#ffefed";
         }
 
-        // --- 모바일 버전 로직 ---
+        // --- 1. 모바일 (속도 유지) ---
         function startMobileGame() {
             function spawnTask() {
                 if (isGameOver) return;
@@ -137,9 +134,7 @@
                 task.style.left = `${Math.random() * (window.innerWidth - 140) + 20}px`;
                 task.style.top = `-60px`;
                 container.appendChild(task);
-
                 const taskObj = { el: task, y: -60, speed: 5.5 + (score * 0.35) };
-
                 task.addEventListener('touchstart', (e) => {
                     e.preventDefault();
                     score++;
@@ -148,28 +143,23 @@
                     setTimeout(() => task.remove(), 40);
                     enemies = enemies.filter(t => t !== taskObj);
                 });
-
                 enemies.push(taskObj);
                 setTimeout(spawnTask, Math.max(150, 650 - (score * 40)));
             }
-
             function mobileLoop() {
                 if (isGameOver) return;
                 for (let i = enemies.length - 1; i >= 0; i--) {
                     const task = enemies[i];
                     task.y += task.speed;
                     task.el.style.transform = `translateY(${task.y}px)`;
-                    if (task.y > window.innerHeight - 70) {
-                        endGame("마감 기한 초과", `총 ${score}개의 업무를 해치웠지만, 결국 마감에 파묻혔습니다.`);
-                    }
+                    if (task.y > window.innerHeight - 70) endGame("마감 기한 초과", `총 ${score}개의 업무를 처리했습니다.`);
                 }
                 requestAnimationFrame(mobileLoop);
             }
-            spawnTask();
-            mobileLoop();
+            spawnTask(); mobileLoop();
         }
 
-        // --- 데스크톱 버전 로직 ---
+        // --- 2. 데스크톱 (밸런스 수정) ---
         function startDesktopGame() {
             let mouseX = window.innerWidth / 2;
             let mouseY = window.innerHeight / 2;
@@ -183,16 +173,21 @@
                 const enemy = document.createElement('div');
                 enemy.classList.add('enemy');
                 enemy.innerText = words[Math.floor(Math.random() * words.length)];
+                
                 const side = Math.floor(Math.random() * 4);
                 let x, y;
-                if(side === 0) { x = Math.random() * window.innerWidth; y = -100; }
-                else if(side === 1) { x = window.innerWidth + 100; y = Math.random() * window.innerHeight; }
-                else if(side === 2) { x = Math.random() * window.innerWidth; y = window.innerHeight + 100; }
-                else { x = -100; y = Math.random() * window.innerHeight; }
+                // 생성 거리를 더 멀리 (100 -> 200) 하여 갑자기 나타나지 않게 함
+                if(side === 0) { x = Math.random() * window.innerWidth; y = -200; }
+                else if(side === 1) { x = window.innerWidth + 200; y = Math.random() * window.innerHeight; }
+                else if(side === 2) { x = Math.random() * window.innerWidth; y = window.innerHeight + 200; }
+                else { x = -200; y = Math.random() * window.innerHeight; }
 
                 container.appendChild(enemy);
-                enemies.push({ el: enemy, x: x, y: y, baseSpeed: Math.random() * 2 + 5, accel: 0.45 });
-                setTimeout(spawnEnemy, Math.max(100, 600 - (score * 50)));
+                // 초기 속도 낮춤 (5 -> 2.5) / 가속도 낮춤 (0.45 -> 0.15)
+                enemies.push({ el: enemy, x: x, y: y, baseSpeed: Math.random() * 1.5 + 2.5, accel: 0.15 });
+                
+                // 생성 주기를 조금 더 여유있게 (600 -> 1000)
+                setTimeout(spawnEnemy, Math.max(200, 1000 - (score * 30)));
             }
 
             function desktopLoop() {
@@ -203,18 +198,25 @@
                     const dx = mouseX - en.x;
                     const dy = mouseY - en.y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
+                    
+                    // 초반 추격 속도 완만하게 계산
                     let currentSpeed = en.baseSpeed + (parseFloat(score) * en.accel);
-                    if (dist < 200) currentSpeed *= 1.7;
+                    
+                    // 근접 보너스 축소 (1.7 -> 1.3)
+                    if (dist < 200) currentSpeed *= 1.3;
+
                     en.x += (dx / dist) * currentSpeed;
                     en.y += (dy / dist) * currentSpeed;
                     en.el.style.transform = `translate(${en.x}px, ${en.y}px)`;
-                    if (dist < 45) endGame("결국 잡혔습니다.", `당신은 현실로부터 ${score}초 동안 도망쳤습니다.`);
+
+                    // 충돌 판정 여유 (45 -> 35)
+                    if (dist < 35) endGame("결국 잡혔습니다.", `현실로부터 ${score}초 동안 도망쳤습니다.`);
                 });
                 requestAnimationFrame(desktopLoop);
             }
-            spawnEnemy();
-            desktopLoop();
+            spawnEnemy(); desktopLoop();
         }
     </script>
 </body>
 </html>
+
