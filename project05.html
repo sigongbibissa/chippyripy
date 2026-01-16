@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Project 02 - GOLD RING SERIES</title>
+    <style>
+        /* CSS는 공유 템플릿과 동일하므로 생략하거나 동일하게 유지 */
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background-color: #ffffff; font-family: 'Garamond', serif; overflow-y: auto; overflow-x: hidden; -webkit-user-select: none; user-select: none; }
+        .header-info { position: fixed; top: 40px; left: 40px; z-index: 1000; opacity: 0; transition: opacity 0.6s ease; }
+        .main-logo { width: 50px; height: auto; cursor: pointer; display: block; }
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 2000; background-color: #ffffff; transition: opacity 0.5s ease, visibility 0.5s ease; }
+        .loading-wrap { display: flex; gap: 0; align-items: center; }
+        .loading-wrap img { width: 150px; height: auto; margin: 0 -40px; opacity: 0; }
+        .is-loading .loading-wrap img { animation: wave 1.2s infinite ease-in-out; }
+        @keyframes wave { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+        .loading-wrap img:nth-child(1) { animation-delay: 0.0s; }
+        .loading-wrap img:nth-child(2) { animation-delay: 0.3s; }
+        .loading-wrap img:nth-child(3) { animation-delay: 0.6s; }
+        .loading-wrap img:nth-child(4) { animation-delay: 0.9s; }
+        .is-complete .loading-overlay { opacity: 0; visibility: hidden; }
+        .is-complete .header-info { opacity: 1; }
+        .project-content { width: 100%; display: flex; flex-direction: column; align-items: center; opacity: 0; transition: opacity 1s ease 0.5s; padding-top: 150px; }
+        .is-complete .project-content { opacity: 1; }
+        .img-wrapper { width: 100%; max-width: 1200px; position: relative; line-height: 0; }
+        .img-wrapper img { width: 100%; height: auto; display: block; -webkit-user-drag: none; }
+        .img-wrapper::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; background: rgba(0,0,0,0); }
+    </style>
+</head>
+<body class="is-loading" oncontextmenu="return false">
+    <div class="loading-overlay">
+        <div class="loading-wrap">
+            <img src="loading1.png" alt="L1"><img src="loading2.png" alt="L2">
+            <img src="loading3.png" alt="L3"><img src="loading4.png" alt="L4">
+        </div>
+    </div>
+    <div class="header-info">
+        <a href="index.html"><img src="logo.png" class="main-logo" alt="Logo"></a>
+    </div>
+    <div class="project-content">
+        <div class="img-wrapper"><img src="p5_1.jpg" alt="Detail 01"></div>
+        <div class="img-wrapper"><img src="p5_2.jpg" alt="Detail 02"></div>
+    </div>
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(() => { document.body.classList.replace('is-loading', 'is-complete'); }, 1500);
+        });
+    </script>
+</body>
+</html>
