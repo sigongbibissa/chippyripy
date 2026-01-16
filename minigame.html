@@ -2,12 +2,11 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=none">
     <title>The Reality of Designer</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap');
         
-        /* 한국어 폰트 가독성을 위해 본고딕 계열 추가 */
         :root { 
             --main-font: "EB Garamond", "Noto Sans KR", sans-serif; 
             --accent-color: #ff3c00; 
@@ -16,56 +15,50 @@
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
             background-color: #ffffff; font-family: var(--main-font); 
-            overflow: hidden; cursor: crosshair; 
+            overflow: hidden; touch-action: none; /* 모바일 줌/스크롤 방지 */
         }
         
         .info-bar { 
-            position: absolute; top: 30px; left: 40px; right: 40px; 
+            position: absolute; top: 20px; left: 20px; right: 20px; 
             display: flex; justify-content: space-between; align-items: center; 
             z-index: 100; pointer-events: none; 
         }
-        .score-box { font-size: 1.5rem; color: #000; font-weight: 600; }
-        .back-link { 
-            text-decoration: none; color: #999; font-size: 1rem; 
-            font-style: italic; pointer-events: auto; transition: color 0.3s; 
-        }
-        .back-link:hover { color: var(--accent-color); }
+        .score-box { font-size: 1.2rem; color: #000; font-weight: 600; }
         
+        /* 업무 텍스트 스타일 */
         .enemy { 
-            position: absolute; color: #000; font-size: 1.3rem; 
-            white-space: nowrap; user-select: none; pointer-events: none; 
-            will-change: transform; font-weight: 700; letter-spacing: -0.05em;
+            position: absolute; color: #000; font-size: 1.2rem; 
+            white-space: nowrap; user-select: none; 
+            font-weight: 700; letter-spacing: -0.05em;
+            cursor: pointer; padding: 10px; /* 터치 영역 확보 */
         }
         
         #game-over { 
             display: none; position: absolute; top: 50%; left: 50%; 
             transform: translate(-50%, -50%); text-align: center; 
             z-index: 200; background: rgba(255,255,255,0.98); 
-            padding: 50px; border: 2px solid #000; 
+            padding: 30px; border: 2px solid #000; width: 80%;
         }
-        #game-over h1 { font-size: 3.5rem; margin: 0 0 10px 0; color: var(--accent-color); }
-        #game-over p { font-size: 1.2rem; margin-bottom: 30px; }
+        #game-over h1 { font-size: 2rem; margin: 0 0 10px 0; color: var(--accent-color); }
         #game-over button { 
             background: #000; color: #fff; border: none; 
-            padding: 15px 40px; font-family: var(--main-font); 
-            font-size: 1.1rem; cursor: pointer; 
+            padding: 12px 30px; font-family: var(--main-font); 
+            font-size: 1rem; cursor: pointer; 
         }
-        #game-over button:hover { background: var(--accent-color); }
     </style>
 </head>
 <body>
 
     <div class="info-bar">
-        <div class="score-box">생존 시간: <span id="score-val">0.0</span>s</div>
-        <a href="index.html" class="back-link">← 탈출하기</a>
+        <div class="score-box" id="mode-text">Survival: <span id="score-val">0</span></div>
     </div>
 
     <div id="game-container"></div>
 
     <div id="game-over">
-        <h1>결국 잡혔습니다.</h1>
-        <p>당신은 현실로부터 <span id="final-score">0</span>초 동안 도망쳤습니다.</p>
-        <button onclick="location.reload()">다시 밤새기</button>
+        <h1 id="over-title">결국 잡혔습니다.</h1>
+        <p id="over-msg">당신은 현실로부터 <span id="final-score">0</span>초 동안 도망쳤습니다.</p>
+        <button onclick="location.reload()">다시 시작하기</button>
     </div>
 
     <script>
@@ -73,103 +66,140 @@
         const scoreVal = document.getElementById('score-val');
         const gameOverScreen = document.getElementById('game-over');
         const finalScore = document.getElementById('final-score');
+        const modeText = document.getElementById('mode-text');
 
         let isGameOver = false;
         let score = 0;
         let startTime = Date.now();
-        let mouseX = window.innerWidth / 2;
-        let mouseY = window.innerHeight / 2;
         let enemies = [];
+        const words = ["밤새야지", "취업해야지", "도면 쳐야지", "모형만들어야지", "설계 해야지"];
 
-        // ==========================================
-        // ✍️ 요청하신 문구들로 수정 완료!
-        // ==========================================
-        const words = [
-            "밤새야지",
-            "취업해야지",
-            "도면 쳐야지",
-            "모형만들어야지",
-            "설계 해야지"
-        ];
-        // ==========================================
+        // 기기 판별 (너비 768px 기준)
+        const isMobile = window.innerWidth <= 768;
 
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-
-        function spawnEnemy() {
-            if (isGameOver) return;
-            const enemy = document.createElement('div');
-            enemy.classList.add('enemy');
-            enemy.innerText = words[Math.floor(Math.random() * words.length)];
-            
-            const side = Math.floor(Math.random() * 4);
-            let x, y;
-            const offset = 150;
-            if(side === 0) { x = Math.random() * window.innerWidth; y = -offset; }
-            else if(side === 1) { x = window.innerWidth + offset; y = Math.random() * window.innerHeight; }
-            else if(side === 2) { x = Math.random() * window.innerWidth; y = window.innerHeight + offset; }
-            else { x = -offset; y = Math.random() * window.innerHeight; }
-
-            enemy.style.left = `0px`; enemy.style.top = `0px`;
-            container.appendChild(enemy);
-
-            enemies.push({
-                el: enemy, x: x, y: y,
-                baseSpeed: Math.random() * 2 + 5, // 기본 속도 상향
-                accel: 0.4 // 가속도 상향
-            });
+        if (isMobile) {
+            modeText.innerHTML = "해결한 업무: <span id='score-val'>0</span>";
+            startMobileGame();
+        } else {
+            modeText.innerHTML = "생존 시간: <span id='score-val'>0.0</span>s";
+            startDesktopGame();
         }
 
-        function gameLoop() {
-            if (isGameOver) return;
-            score = ((Date.now() - startTime) / 1000).toFixed(1);
-            scoreVal.innerText = score;
-
-            enemies.forEach((en) => {
-                const dx = mouseX - en.x;
-                const dy = mouseY - en.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-
-                let currentSpeed = en.baseSpeed + (score * en.accel);
-                
-                if (dist < 200) {
-                    currentSpeed *= 1.6; // 근접 시 더 빠르게 돌진
-                    en.el.style.color = "#ff3c00";
-                } else {
-                    en.el.style.color = "#000";
-                }
-
-                const vx = (dx / dist) * currentSpeed;
-                const vy = (dy / dist) * currentSpeed;
-
-                en.x += vx; en.y += vy;
-                en.el.style.transform = `translate(${en.x}px, ${en.y}px)`;
-
-                // 충돌 판정 (한글은 폭이 넓어 45 정도로 설정)
-                if (dist < 45) endGame();
-            });
-            requestAnimationFrame(gameLoop);
-        }
-
-        function endGame() {
+        // --- [공통] 게임 종료 함수 ---
+        function endGame(title, msg) {
             isGameOver = true;
             gameOverScreen.style.display = 'block';
-            finalScore.innerText = score;
+            document.getElementById('over-title').innerText = title;
+            document.getElementById('over-msg').innerText = msg;
             document.body.style.backgroundColor = "#ffefed";
         }
 
-        let spawnRate = 700;
-        function adaptiveSpawn() {
-            if (isGameOver) return;
-            spawnEnemy();
-            spawnRate = Math.max(120, 700 - (score * 60)); 
-            setTimeout(adaptiveSpawn, spawnRate);
+        // ==========================================
+        // 1. 모바일 버전: 마감 쳐내기 (Falling Game)
+        // ==========================================
+        function startMobileGame() {
+            function spawnTask() {
+                if (isGameOver) return;
+                const task = document.createElement('div');
+                task.classList.add('enemy');
+                task.innerText = words[Math.floor(Math.random() * words.length)];
+                
+                const startX = Math.random() * (window.innerWidth - 100);
+                task.style.left = `${startX}px`;
+                task.style.top = `-50px`;
+                container.appendChild(task);
+
+                const taskObj = {
+                    el: task,
+                    y: -50,
+                    speed: 2 + (score * 0.1) // 점수 올라갈수록 빨라짐
+                };
+
+                // 터치 시 제거
+                task.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    score++;
+                    document.getElementById('score-val').innerText = score;
+                    task.style.color = "var(--accent-color)";
+                    setTimeout(() => task.remove(), 50);
+                    enemies = enemies.filter(t => t !== taskObj);
+                });
+
+                enemies.push(taskObj);
+                setTimeout(spawnTask, Math.max(400, 1000 - (score * 20)));
+            }
+
+            function mobileLoop() {
+                if (isGameOver) return;
+                enemies.forEach((task, index) => {
+                    task.y += task.speed;
+                    task.el.style.transform = `translateY(${task.y}px)`;
+
+                    // 바닥에 닿으면 게임 오버
+                    if (task.y > window.innerHeight - 50) {
+                        endGame("마감 기한 초과", `총 ${score}개의 업무를 처리했지만, 결국 마감에 치였습니다.`);
+                    }
+                });
+                requestAnimationFrame(mobileLoop);
+            }
+            spawnTask();
+            mobileLoop();
         }
 
-        adaptiveSpawn();
-        gameLoop();
+        // ==========================================
+        // 2. 데스크톱 버전: 도망치기 (기존 로직)
+        // ==========================================
+        function startDesktopGame() {
+            let mouseX = window.innerWidth / 2;
+            let mouseY = window.innerHeight / 2;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            function spawnEnemy() {
+                if (isGameOver) return;
+                const enemy = document.createElement('div');
+                enemy.classList.add('enemy');
+                enemy.innerText = words[Math.floor(Math.random() * words.length)];
+                
+                const side = Math.floor(Math.random() * 4);
+                let x, y;
+                if(side === 0) { x = Math.random() * window.innerWidth; y = -100; }
+                else if(side === 1) { x = window.innerWidth + 100; y = Math.random() * window.innerHeight; }
+                else if(side === 2) { x = Math.random() * window.innerWidth; y = window.innerHeight + 100; }
+                else { x = -100; y = Math.random() * window.innerHeight; }
+
+                container.appendChild(enemy);
+                enemies.push({ el: enemy, x: x, y: y, baseSpeed: Math.random() * 2 + 3, accel: 0.3 });
+                setTimeout(spawnEnemy, Math.max(150, 800 - (score * 50)));
+            }
+
+            function desktopLoop() {
+                if (isGameOver) return;
+                score = ((Date.now() - startTime) / 1000).toFixed(1);
+                document.getElementById('score-val').innerText = score;
+
+                enemies.forEach((en) => {
+                    const dx = mouseX - en.x;
+                    const dy = mouseY - en.y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    let currentSpeed = en.baseSpeed + (parseFloat(score) * en.accel);
+                    
+                    if (dist < 200) currentSpeed *= 1.5;
+
+                    en.x += (dx / dist) * currentSpeed;
+                    en.y += (dy / dist) * currentSpeed;
+                    en.el.style.transform = `translate(${en.x}px, ${en.y}px)`;
+
+                    if (dist < 40) endGame("결국 잡혔습니다.", `당신은 현실로부터 ${score}초 동안 도망쳤습니다.`);
+                });
+                requestAnimationFrame(desktopLoop);
+            }
+            spawnEnemy();
+            desktopLoop();
+        }
     </script>
 </body>
 </html>
