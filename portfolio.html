@@ -44,7 +44,7 @@
         .is-complete .loading-overlay { opacity: 0; visibility: hidden; }
         .is-complete .logo-container { opacity: 1; }
 
-        /* --- 필터 UI --- */
+        /* --- 필터/소팅 UI --- */
         .filter-container {
             position: fixed; top: 45px; right: 40px; z-index: 1000;
             display: flex; gap: 20px; opacity: 0;
@@ -71,11 +71,12 @@
         }
         .is-complete .work-container { opacity: 1; visibility: visible; transform: translateY(0); }
 
-        /* --- 워크 아이템 공통 --- */
+        /* --- 워크 아이템 공통 및 링크 스타일 --- */
         .work-item { 
             display: flex; flex-direction: column; position: relative; cursor: pointer;
             transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
         }
+        /* 링크가 레이아웃을 해치지 않게 설정 */
         .work-item a { text-decoration: none; color: inherit; display: contents; }
 
         .work-item.hidden {
@@ -85,15 +86,16 @@
         }
 
         .img-box { 
-            width: 100%; background-color: #f2f2f2; margin-bottom: 15px; 
+            width: 100%; background-color: #000000; margin-bottom: 15px; 
             opacity: 1; overflow: hidden; position: relative;
             transition: opacity 0.4s ease, transform 0.2s ease;
         }
         .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .img-box::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; background: rgba(0,0,0,0); }
 
         /* 호버 효과 */
-        .work-item:hover .img-box { opacity: 0.1; } /* 누를 수 있다는 느낌을 주기 위해 살짝 투명화 */
-        .work-item:active .img-box { transform: scale(1.02); opacity: 1; }
+        .work-item:hover .img-box { opacity: 0.05; }
+        .work-item:active .img-box { transform: scale(1.05); opacity: 1; }
 
         .work-item h2 { 
             font-weight: normal; font-size: 0.55rem; letter-spacing: 0.2em; 
@@ -103,13 +105,13 @@
         }
         .work-item:hover h2 { opacity: 1; transform: translateY(0); }
 
-        /* 배치 설정 (기존 레이아웃 유지) */
-        .item-1 { grid-column: 2 / 7; } .item-1 .img-box { aspect-ratio: 16 / 10; background-color: #e0e0e0;}
-        .item-2 { grid-column: 8 / 11; margin-top: -60px; } .item-2 .img-box { aspect-ratio: 3 / 4; background-color: #e0e0e0;}
-        .item-3 { grid-column: 3 / 6; margin-top: 40px; } .item-3 .img-box { aspect-ratio: 1 / 1; background-color: #e0e0e0;}
-        .item-4 { grid-column: 7 / 9; margin-top: -120px; } .item-4 .img-box { aspect-ratio: 2 / 3; background-color: #e0e0e0;}
-        .item-5 { grid-column: 4 / 10; } .item-5 .img-box { aspect-ratio: 2 / 1; background-color: #e0e0e0;}
-        .item-6 { grid-column: 8 / 12; margin-top: 80px; } .item-6 .img-box { aspect-ratio: 4 / 3; background-color: #e0e0e0;}
+        /* 배치 설정 (그리드 레이아웃) */
+        .item-1 { grid-column: 2 / 7; } .item-1 .img-box { aspect-ratio: 16 / 10; }
+        .item-2 { grid-column: 8 / 11; margin-top: -60px; } .item-2 .img-box { aspect-ratio: 3 / 4; }
+        .item-3 { grid-column: 3 / 6; margin-top: 40px; } .item-3 .img-box { aspect-ratio: 1 / 1; }
+        .item-4 { grid-column: 7 / 9; margin-top: -120px; } .item-4 .img-box { aspect-ratio: 2 / 3; }
+        .item-5 { grid-column: 4 / 10; } .item-5 .img-box { aspect-ratio: 2 / 1; }
+        .item-6 { grid-column: 8 / 12; margin-top: 80px; } .item-6 .img-box { aspect-ratio: 4 / 3; }
     </style>
 </head>
 <body class="is-loading" oncontextmenu="return false">
@@ -135,15 +137,15 @@
     <div class="work-container">
         <section class="work-item item-1" data-category="architecture">
             <a href="project01.html">
-                <div class="img-box"><img src="main.jpg" alt="Project 01"></div>
-                <h2>01. ARCO ART LIBRARY-ARCHITECTURAL RENOVATION</h2>
+                <div class="img-box"><img src="main.jpg" alt="Arco Art Library"></div>
+                <h2>01. Arco Art Library-Architectural Renovation</h2>
             </a>
         </section>
 
-        <section class="work-item item-2" data-category="jewelry">
+        <section class="work-item item-2" data-category="architecture">
             <a href="project02.html">
-                <div class="img-box"></div>
-                <h2>02. GOLD RING SERIES</h2>
+                <div class="img-box"><img src="image_1.png" alt="Suwon crafting village"></div>
+                <h2>02. Suwon crafting village</h2>
             </a>
         </section>
 
