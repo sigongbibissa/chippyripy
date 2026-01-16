@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main - Interactive Menu (Easter Egg Included)</title>
+    <title>Main - Interactive Menu</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Noto+Serif+KR:wght@400;700&display=swap');
 
         :root {
             --reveal-speed: 1s;
             --infinite-speed: 1.2s; 
-            --flee-speed: 0.2s;
-            --return-speed: 0.15s;
             --accent-color: #ff3c00;
             --main-font: "EB Garamond", "Noto Serif KR", serif;
         }
@@ -29,16 +27,11 @@
 
         /* --- 로고 --- */
         .logo-container {
-            position: absolute; 
-            top: 40px; 
-            left: 40px;
-            z-index: 1000;
-            transition: transform 0.5s ease-out, opacity 0.5s ease;
+            position: absolute; top: 40px; left: 40px; z-index: 1000;
+            transition: transform 0.3s ease-out, opacity 0.3s ease;
         }
         .main-logo { 
-            width: 60px; 
-            height: auto; 
-            opacity: 0;
+            width: 60px; height: auto; opacity: 0;
             animation: logoReveal 0.8s ease forwards;
         }
 
@@ -46,9 +39,8 @@
         .main-menu { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 50; }
         .menu-item {
             position: absolute; text-decoration: none; color: #1a1a1a; 
-            font-size: 1.4rem; 
-            opacity: 0; display: inline-block; transform-origin: center;
-            transition: opacity var(--reveal-speed) ease, transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), color 0.2s ease;
+            font-size: 1.4rem; opacity: 0; display: inline-block;
+            transition: opacity var(--reveal-speed) ease, transform 0.5s ease-out, color 0.2s ease;
             animation: itemAppear 0.8s ease forwards;
             letter-spacing: -0.02em;
         }
@@ -59,43 +51,27 @@
 
         /* --- 현실도피하기 버튼 --- */
         .minigame-btn {
-            position: absolute;
-            bottom: 40px; 
-            left: 40px;   
-            z-index: 1000;
-            text-decoration: none;
-            color: #000;
-            font-size: 1.1rem;
-            font-weight: 500;
-            font-style: italic;
-            opacity: 0;
-            transition: all 0.5s ease;
+            position: absolute; bottom: 40px; left: 40px; z-index: 1000;
+            text-decoration: none; color: #000; font-size: 1.1rem;
+            font-weight: 500; font-style: italic; opacity: 0;
+            transition: all 0.3s ease;
             animation: itemAppear 0.8s ease forwards 1s;
         }
 
-        .minigame-btn:hover {
-            color: var(--accent-color);
-            transform: scale(1.1);
-        }
+        .minigame-btn:hover { color: var(--accent-color); transform: scale(1.1); }
 
-        /* --- 인터랙션 로직 (:has 활용) --- */
+        /* --- 기존 인터랙션 (:has) --- */
         .page-wrapper:has(.menu-item:hover) .logo-container {
             transform: translate(-10px, -10px) scale(0.9);
             animation: tremble 0.07s infinite;
             opacity: 0.5;
         }
-
         .page-wrapper:has(.menu-item:hover) .minigame-btn {
-            opacity: 0.15;
-            transform: translateX(-20px); 
-            pointer-events: none;
+            opacity: 0.15; transform: translateX(-20px); pointer-events: none;
         }
-
         .page-wrapper:has(.menu-item:hover) .menu-item:not(:hover) { 
-            opacity: 0.1; 
-            animation: tremble 0.07s infinite; 
+            opacity: 0.1; animation: tremble 0.07s infinite; 
         }
-
         .page-wrapper:has(.menu-item:hover) .menu-item.shop:not(:hover) { transform: translateX(-80px); }
         .page-wrapper:has(.menu-item:hover) .menu-item.portfolio:not(:hover) { transform: translate(80px, -80px); }
         .page-wrapper:has(.menu-item:hover) .menu-item.about:not(:hover) { transform: translate(80px, 80px); }
@@ -105,12 +81,13 @@
             opacity: 1 !important; 
         }
 
-        /* --- 이스터에그: 우수수 떨어지는 효과 --- */
+        /* --- 🔥 이스터에그: 우수수 떨어지는 효과 🔥 --- */
         .fall-down {
             pointer-events: none !important;
-            transform: translateY(120vh) rotate(45deg) !important;
+            /* 기존 위치를 완전히 무시하고 화면 아래로 이동 */
+            transform: translateY(110vh) rotate(var(--fall-rotate, 20deg)) !important;
             opacity: 0 !important;
-            transition: transform 1.5s cubic-bezier(0.5, 0, 1, 0.5), opacity 1s !important;
+            transition: transform 2s cubic-bezier(0.5, 0, 1, 0.5), opacity 1.5s !important;
         }
 
         /* 애니메이션 정의 */
@@ -118,13 +95,12 @@
         @keyframes itemAppear { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes tremble { 0% { margin: 1px 1px; } 50% { margin: -1px -1px; } 100% { margin: 1px 1px; } }
         @keyframes infiniteRotate { from { transform: rotate(0deg) scale(1.4); } to { transform: rotate(360deg) scale(1.4); } }
-
     </style>
 </head>
 <body>
 
     <div class="page-wrapper" id="wrapper">
-        <div class="logo-container" id="logo">
+        <div class="logo-container" id="logo-box">
             <img src="logo.png" class="main-logo" alt="LOGO" onerror="this.style.display='none'; this.parentElement.innerHTML='LOGO';">
         </div>
 
@@ -134,44 +110,47 @@
             <a href="about.html" class="menu-item about">About</a>
         </nav>
 
-        <a href="minigame.html" class="minigame-btn" id="escapeBtn">
-            현실도피하기
-        </a>
+        <a href="minigame.html" class="minigame-btn" id="escape-btn">현실도피하기</a>
     </div>
 
     <script>
         let idleTimer;
         const idleLimit = 10000; // 10초
 
-        // 이스터에그: 요소들을 아래로 떨어뜨림
         function triggerEasterEgg() {
-            const items = document.querySelectorAll('.menu-item, .logo-container, .minigame-btn');
-            items.forEach((item, index) => {
+            // 떨어뜨릴 모든 요소 선택
+            const targets = document.querySelectorAll('.menu-item, .logo-container, .minigame-btn');
+            
+            targets.forEach((el, index) => {
+                // 랜덤한 회전 각도 부여 (--fall-rotate 변수 사용)
+                const randomDeg = Math.floor(Math.random() * 60) - 30; // -30deg ~ 30deg
+                el.style.setProperty('--fall-rotate', `${randomDeg}deg`);
+
+                // 순차적으로 떨어지는 시차 효과
                 setTimeout(() => {
-                    item.classList.add('fall-down');
-                }, index * 150); // 각 요소가 0.15초 간격으로 우수수 떨어짐
+                    el.classList.add('fall-down');
+                }, index * 150);
             });
         }
 
-        // 타이머 리셋: 사용자가 움직이면 다시 원래대로
         function resetTimer() {
-            const fallenItems = document.querySelectorAll('.fall-down');
-            if (fallenItems.length > 0) {
-                fallenItems.forEach(item => item.classList.remove('fall-down'));
+            // 마우스를 움직이면 떨어진 요소 복구
+            const fallen = document.querySelectorAll('.fall-down');
+            if (fallen.length > 0) {
+                fallen.forEach(el => el.classList.remove('fall-down'));
             }
 
             clearTimeout(idleTimer);
             idleTimer = setTimeout(triggerEasterEgg, idleLimit);
         }
 
-        // 사용자 활동 감지 리스너 (마우스 이동, 클릭, 키 입력 등)
-        ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll'].forEach(evt => {
-            window.addEventListener(evt, resetTimer);
+        // 활동 감지 리스너
+        ['mousemove', 'mousedown', 'keydown', 'touchstart'].forEach(type => {
+            window.addEventListener(type, resetTimer);
         });
 
-        // 초기 타이머 시작
+        // 초기 타이머 실행
         resetTimer();
     </script>
-
 </body>
 </html>
