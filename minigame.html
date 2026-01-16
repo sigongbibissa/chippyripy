@@ -83,7 +83,7 @@
     <div id="game-over">
         <h1 id="over-title">결국 잡혔습니다.</h1>
         <p id="over-msg">당신은 현실로부터 <span id="final-score">0</span>초 동안 도망쳤습니다.</p>
-        <button onclick="location.reload()">다시 밤새기</button>
+        <button onclick="location.reload()">다시 도피하기</button>
     </div>
 
     <script>
@@ -97,7 +97,7 @@
         let score = 0;
         let startTime;
         let enemies = [];
-        const words = ["밤새야지", "취업해야지", "도면 쳐야지", "모형만들어야지", "설계 해야지", "컨펌받아야지", "수정해야지"];
+        const words = ["운동 해야지", "취업 해야지", "도면 쳐야지", "모형 만들어야지", "설계 해야지", "컨펌 받아야지", "수정 해야지"];
         const isMobile = window.innerWidth <= 768;
 
         function initGame() {
@@ -219,4 +219,5 @@
     </script>
 </body>
 </html>
+
 
