@@ -20,7 +20,7 @@
 
         img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
 
-        /* --- 로고 및 로딩 (기존 유지) --- */
+        /* --- 로고 및 로딩 --- */
         .logo-container {
             position: fixed; top: 40px; left: 40px; z-index: 1000;
             opacity: 0; transition: opacity 0.6s ease;
@@ -44,28 +44,19 @@
         .is-complete .loading-overlay { opacity: 0; visibility: hidden; }
         .is-complete .logo-container { opacity: 1; }
 
-        /* --- [신규] 필터/소팅 UI --- */
+        /* --- 필터 UI --- */
         .filter-container {
-            position: fixed;
-            top: 45px;
-            right: 40px;
-            z-index: 1000;
-            display: flex;
-            gap: 20px;
-            opacity: 0;
+            position: fixed; top: 45px; right: 40px; z-index: 1000;
+            display: flex; gap: 20px; opacity: 0;
             transition: opacity 0.6s ease 0.5s;
         }
         .is-complete .filter-container { opacity: 1; }
 
         .filter-btn {
             background: none; border: none;
-            font-family: 'Garamond', serif;
-            font-size: 0.65rem;
-            letter-spacing: 0.15em;
-            color: #1a1a1a;
-            cursor: pointer;
-            padding: 0;
-            opacity: 0.4;
+            font-family: 'Garamond', serif; font-size: 0.65rem;
+            letter-spacing: 0.15em; color: #1a1a1a;
+            cursor: pointer; padding: 0; opacity: 0.4;
             transition: opacity 0.3s ease;
         }
         .filter-btn.active, .filter-btn:hover { opacity: 1; }
@@ -80,32 +71,29 @@
         }
         .is-complete .work-container { opacity: 1; visibility: visible; transform: translateY(0); }
 
-        /* --- 워크 아이템 및 애니메이션 --- */
+        /* --- 워크 아이템 공통 --- */
         .work-item { 
             display: flex; flex-direction: column; position: relative; cursor: pointer;
             transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
         }
+        .work-item a { text-decoration: none; color: inherit; display: contents; }
 
-        /* 소팅 시 숨겨지는 아이템 */
         .work-item.hidden {
-            opacity: 0;
-            visibility: hidden;
+            opacity: 0; visibility: hidden;
             transform: translateY(20px) scale(0.95);
-            pointer-events: none;
-            position: absolute; /* 공간을 차지하지 않게 함 */
+            pointer-events: none; position: absolute;
         }
 
         .img-box { 
-            width: 100%; background-color: #000000; margin-bottom: 15px; 
+            width: 100%; background-color: #f2f2f2; margin-bottom: 15px; 
             opacity: 1; overflow: hidden; position: relative;
             transition: opacity 0.4s ease, transform 0.2s ease;
         }
         .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .img-box::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; background: rgba(0,0,0,0); }
 
-        /* 호버 효과 (벌벌 떠는 효과 대신 깔끔하게 밝아짐) */
-        .work-item:hover .img-box { opacity: 0.05; }
-        .work-item:active .img-box { transform: scale(1.05); opacity: 1; }
+        /* 호버 효과 */
+        .work-item:hover .img-box { opacity: 0.1; } /* 누를 수 있다는 느낌을 주기 위해 살짝 투명화 */
+        .work-item:active .img-box { transform: scale(1.02); opacity: 1; }
 
         .work-item h2 { 
             font-weight: normal; font-size: 0.55rem; letter-spacing: 0.2em; 
@@ -115,13 +103,13 @@
         }
         .work-item:hover h2 { opacity: 1; transform: translateY(0); }
 
-        /* 배치 설정 (기존 유지) */
-        .item-1 { grid-column: 2 / 7; } .item-1 .img-box { aspect-ratio: 16 / 10; }
-        .item-2 { grid-column: 8 / 11; margin-top: -60px; } .item-2 .img-box { aspect-ratio: 3 / 4; }
-        .item-3 { grid-column: 3 / 6; margin-top: 40px; } .item-3 .img-box { aspect-ratio: 1 / 1; }
-        .item-4 { grid-column: 7 / 9; margin-top: -120px; } .item-4 .img-box { aspect-ratio: 2 / 3; }
-        .item-5 { grid-column: 4 / 10; } .item-5 .img-box { aspect-ratio: 2 / 1; }
-        .item-6 { grid-column: 8 / 12; margin-top: 80px; } .item-6 .img-box { aspect-ratio: 4 / 3; }
+        /* 배치 설정 (기존 레이아웃 유지) */
+        .item-1 { grid-column: 2 / 7; } .item-1 .img-box { aspect-ratio: 16 / 10; background-color: #e0e0e0;}
+        .item-2 { grid-column: 8 / 11; margin-top: -60px; } .item-2 .img-box { aspect-ratio: 3 / 4; background-color: #e0e0e0;}
+        .item-3 { grid-column: 3 / 6; margin-top: 40px; } .item-3 .img-box { aspect-ratio: 1 / 1; background-color: #e0e0e0;}
+        .item-4 { grid-column: 7 / 9; margin-top: -120px; } .item-4 .img-box { aspect-ratio: 2 / 3; background-color: #e0e0e0;}
+        .item-5 { grid-column: 4 / 10; } .item-5 .img-box { aspect-ratio: 2 / 1; background-color: #e0e0e0;}
+        .item-6 { grid-column: 8 / 12; margin-top: 80px; } .item-6 .img-box { aspect-ratio: 4 / 3; background-color: #e0e0e0;}
     </style>
 </head>
 <body class="is-loading" oncontextmenu="return false">
@@ -146,41 +134,45 @@
 
     <div class="work-container">
         <section class="work-item item-1" data-category="architecture">
-            <a href="project01.html" style="text-decoration:none; color:inherit; display:contents;">
-                <div class="img-box"><img src="main.jpg" alt="Arco Art Library"></div>
-                <h2>01. Arco Art Library-Architectural Renovation</h2>
+            <a href="project01.html">
+                <div class="img-box"><img src="main.jpg" alt="Project 01"></div>
+                <h2>01. ARCO ART LIBRARY-ARCHITECTURAL RENOVATION</h2>
             </a>
         </section>
 
-        <section class="work-item item-2" data-category="architecture">
-            <div class="img-box"></div>
-            <h2>02. GOLD RING SERIES</h2>
-        </section>
         <section class="work-item item-2" data-category="jewelry">
-    <a href="project02.html" style="text-decoration:none; color:inherit; display:contents;">
-        <div class="img-box"></div>
-        <h2>02. GOLD RING SERIES</h2>
-    </a>
-</section>
+            <a href="project02.html">
+                <div class="img-box"></div>
+                <h2>02. GOLD RING SERIES</h2>
+            </a>
+        </section>
 
         <section class="work-item item-3" data-category="furniture">
-            <div class="img-box"></div>
-            <h2>03. WOODEN CHAIR PROJECT</h2>
+            <a href="project03.html">
+                <div class="img-box"></div>
+                <h2>03. WOODEN CHAIR PROJECT</h2>
+            </a>
         </section>
 
         <section class="work-item item-4" data-category="architecture">
-            <div class="img-box"></div>
-            <h2>04. URBAN PAVILION</h2>
+            <a href="project04.html">
+                <div class="img-box"></div>
+                <h2>04. URBAN PAVILION</h2>
+            </a>
         </section>
 
         <section class="work-item item-5" data-category="jewelry">
-            <div class="img-box"></div>
-            <h2>05. SILVER BRACELET</h2>
+            <a href="project05.html">
+                <div class="img-box"></div>
+                <h2>05. SILVER BRACELET</h2>
+            </a>
         </section>
 
         <section class="work-item item-6" data-category="furniture">
-            <div class="img-box"></div>
-            <h2>06. MINIMALIST DESK</h2>
+            <a href="project06.html">
+                <div class="img-box"></div>
+                <h2>06. MINIMALIST DESK</h2>
+            </a>
         </section>
     </div>
 
@@ -198,7 +190,6 @@
 
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                // 활성화 버튼 표시
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
 
@@ -216,5 +207,4 @@
         });
     </script>
 </body>
-
 </html>
