@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main - Interactive Menu</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Noto+Serif+KR:wght@400;700&display=swap');
+
+        :root {
+            --reveal-speed: 1s;
+            --infinite-speed: 1.2s; 
+            --flee-speed: 0.2s;
+            --return-speed: 0.15s;
+            --accent-color: #ff3c00;
+            /* 한글과 영문 가라몬드가 잘 어우러지도록 폰트 설정 */
+            --main-font: "EB Garamond", "Noto Serif KR", serif;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            background-color: #ffffff;
+            font-family: var(--main-font); 
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .page-wrapper { width: 100%; height: 100%; position: relative; }
+
+        /* --- 로고 --- */
+        .logo-container {
+            position: absolute; 
+            top: 40px; 
+            left: 40px;
+            z-index: 1000;
+            transition: transform var(--return-speed) ease-out, opacity 0.3s ease;
+        }
+        .main-logo { 
+            width: 60px; 
+            height: auto; 
+            opacity: 0;
+            animation: logoReveal 0.8s ease forwards;
+        }
+
+        /* --- 메인 메뉴 --- */
+        .main-menu { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 50; }
+        .menu-item {
+            position: absolute; text-decoration: none; color: #1a1a1a; 
+            font-size: 1.4rem; 
+            opacity: 0; display: inline-block; transform-origin: center;
+            transition: opacity var(--reveal-speed) ease, transform var(--return-speed) ease-out, color 0.2s ease;
+            animation: itemAppear 0.8s ease forwards;
+            letter-spacing: -0.02em;
+        }
+
+        .menu-item.shop { left: 35%; top: 45%; animation-delay: 0.2s; }
+        .menu-item.portfolio { right: 30%; top: 25%; animation-delay: 0.4s; }
+        .menu-item.about { right: 25%; bottom: 20%; animation-delay: 0.6s; }
+
+        /* --- 현실도피하기 버튼 (수정됨) --- */
+        .minigame-btn {
+            position: absolute;
+            bottom: 40px; 
+            left: 40px;   
+            z-index: 1000;
+            text-decoration: none;
+            
+            color: #000;              /* 검은색 */
+            font-size: 1.1rem;        /* 크기 */
+            font-weight: 500;
+            font-family: var(--main-font);
+            font-style: italic;       /* 이탤릭체로 세련미 추가 */
+            
+            opacity: 0;
+            transition: all 0.3s ease;
+            animation: itemAppear 0.8s ease forwards 1s;
+        }
+
+        .minigame-btn:hover {
+            color: var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        /* --- 인터랙션 로직 --- */
+        .page-wrapper:has(.menu-item:hover) .logo-container {
+            transform: translate(-10px, -10px) scale(0.9);
+            animation: tremble 0.07s infinite;
+            opacity: 0.5;
+        }
+
+        /* 상단 메뉴 호버 시 "현실도피하기" 버튼이 왼쪽으로 살짝 도망침 */
+        .page-wrapper:has(.menu-item:hover) .minigame-btn {
+            opacity: 0.15;
+            transform: translateX(-20px); 
+            pointer-events: none;
+        }
+
+        .page-wrapper:has(.menu-item:hover) .menu-item:not(:hover) { 
+            opacity: 0.1; 
+            animation: tremble 0.07s infinite; 
+        }
+
+        /* 메뉴 호버 시 사방으로 흩어지는 효과 */
+        .page-wrapper:has(.menu-item:hover) .menu-item.shop:not(:hover) { transform: translateX(-80px); }
+        .page-wrapper:has(.menu-item:hover) .menu-item.portfolio:not(:hover) { transform: translate(80px, -80px); }
+        .page-wrapper:has(.menu-item:hover) .menu-item.about:not(:hover) { transform: translate(80px, 80px); }
+
+        .menu-item:hover { 
+            animation: infiniteRotate var(--infinite-speed) linear infinite !important; 
+            opacity: 1 !important; 
+        }
+
+        /* 애니메이션 정의 */
+        @keyframes logoReveal { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes itemAppear { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes tremble { 0% { margin: 1px 1px; } 50% { margin: -1px -1px; } 100% { margin: 1px 1px; } }
+        @keyframes infiniteRotate { from { transform: rotate(0deg) scale(1.4); } to { transform: rotate(360deg) scale(1.4); } }
+
+    </style>
+</head>
+<body>
+    <div class="page-wrapper" id="wrapper">
+        <div class="logo-container">
+            <img src="logo.png" class="main-logo" alt="LOGO" onerror="this.style.display='none'; this.parentElement.innerHTML='LOGO';">
+        </div>
+
+        <nav class="main-menu">
+            <a href="shop.html" class="menu-item shop">Shop</a>
+            <a href="portfolio.html" class="menu-item portfolio">Portfolio</a>
+            <a href="about.html" class="menu-item about">About</a>
+        </nav>
+
+        <a href="minigame.html" class="minigame-btn">
+            현실도피하기
+        </a>
+    </div>
+</body>
+</html>
