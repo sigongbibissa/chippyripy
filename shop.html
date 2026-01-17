@@ -2,63 +2,133 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Product 01 - Detail</title>
+    <title>Shop - Portfolio</title>
     <style>
+        :root {
+            --reveal-speed: 1s;
+        }
+
         body, html {
             margin: 0; padding: 0;
+            width: 100%; height: 100%;
             background-color: #ffffff;
             font-family: 'Times New Roman', serif;
         }
-        
-        /* 상단 헤더 */
-        .header {
-            position: fixed; top: 40px; left: 40px; right: 40px;
-            display: flex; justify-content: space-between; align-items: center;
-            z-index: 1000;
+
+        /* --- 1. 로딩 오버레이 (클릭 방해 해결) --- */
+        .loading-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 2000; background-color: #ffffff;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
         }
+        .is-complete .loading-overlay { 
+            opacity: 0; 
+            visibility: hidden; 
+            pointer-events: none; /* 로딩 후 클릭 가능하게 설정 */
+        }
+
+        .loading-wrap { display: flex; align-items: center; }
+        .loading-wrap img { width: 150px; height: auto; margin: 0 -40px; opacity: 0; }
+        @keyframes blink { 0%, 100% { opacity: 0.1; } 50% { opacity: 1; } }
+        .is-loading .loading-wrap img { animation: blink 1.2s infinite ease-in-out; }
+        .loading-wrap img:nth-child(1) { animation-delay: 0.0s; }
+        .loading-wrap img:nth-child(2) { animation-delay: 0.2s; }
+        .loading-wrap img:nth-child(3) { animation-delay: 0.4s; }
+        .loading-wrap img:nth-child(4) { animation-delay: 0.6s; }
+
+        /* --- 2. 로고 --- */
+        .logo-container {
+            position: fixed; top: 40px; left: 40px;
+            z-index: 1000; opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+        .is-complete .logo-container { opacity: 1; }
         .main-logo { width: 60px; height: auto; }
-        .back-btn { text-decoration: none; color: #000; font-size: 0.8rem; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 2px; }
 
-        /* 컨텐츠 */
-        .detail-wrapper {
-            padding: 140px 40px;
-            max-width: 1200px; margin: 0 auto;
+        /* --- 3. 컨텐츠 영역 (3열 6줄 그리드) --- */
+        .shop-container {
+            padding: 140px 40px 80px;
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
+            /* 정확히 3열로 고정 */
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 40px 20px; /* 세로 간격 40px, 가로 간격 20px */
             opacity: 0; transform: translateY(20px);
-            transition: all 1s ease;
+            transition: all 1s ease 0.3s;
+            max-width: 1200px; /* 전체 너비 제한 (선택사항) */
+            margin: 0 auto;
         }
-        .is-ready .detail-wrapper { opacity: 1; transform: translateY(0); }
+        .is-complete .shop-container { opacity: 1; transform: translateY(0); }
 
-        .detail-img { width: 100%; aspect-ratio: 1/1.2; background-color: #f4f4f4; }
-        .detail-info h1 { font-size: 2rem; font-weight: normal; margin: 0 0 20px; }
-        .detail-info p { line-height: 1.8; color: #555; font-size: 1rem; }
+        /* --- 4. 상품 아이템 스타일 --- */
+        .shop-item { 
+            text-decoration: none; 
+            color: inherit; 
+            display: block; 
+            text-align: center;
+        }
+        .img-box { 
+            width: 100%; 
+            aspect-ratio: 1; /* 정사각형 유지 */
+            background-color: #f4f4f4; 
+            margin-bottom: 12px; 
+            transition: background-color 0.3s ease;
+        }
+        .shop-item:hover .img-box { background-color: #e0e0e0; }
+        .shop-item p { 
+            font-size: 0.85rem; 
+            color: #333; 
+            letter-spacing: 0.05em; 
+            margin: 0;
+            text-transform: uppercase;
+        }
 
+        /* 모바일에서는 2열로 변경 (선택사항) */
         @media (max-width: 768px) {
-            .detail-wrapper { grid-template-columns: 1fr; padding: 100px 20px; }
+            .shop-container { grid-template-columns: repeat(2, 1fr); padding: 100px 20px; }
+            .logo-container { top: 20px; left: 20px; }
         }
     </style>
 </head>
-<body>
-    <div class="header">
-        <a href="index.html"><img src="logo.png" class="main-logo" alt="Logo"></a>
-        <a href="shop.html" class="back-btn">BACK TO LIST</a>
+<body class="is-loading">
+
+    <div class="loading-overlay">
+        <div class="loading-wrap">
+            <img src="loading1.png" alt="L1"><img src="loading2.png" alt="L2">
+            <img src="loading3.png" alt="L3"><img src="loading4.png" alt="L4">
+        </div>
     </div>
 
-    <div class="detail-wrapper">
-        <div class="detail-img">
-            </div>
-        <div class="detail-info">
-            <h1>Product Item 01</h1>
-            <p>여기에 상품 상세 설명을 입력하세요. <br><br>
-               디자인 철학이나 사용된 기술, 브랜드 스토리를 적으면 포트폴리오의 완성도가 높아집니다.</p>
-        </div>
+    <div class="logo-container">
+        <a href="index.html"><img src="logo.png" class="main-logo" alt="Logo"></a>
+    </div>
+
+    <div class="shop-container">
+        <a href="item-01.html" class="shop-item"><div class="img-box"></div><p>Item 01</p></a>
+        <a href="item-02.html" class="shop-item"><div class="img-box"></div><p>Item 02</p></a>
+        <a href="item-03.html" class="shop-item"><div class="img-box"></div><p>Item 03</p></a>
+        <a href="item-04.html" class="shop-item"><div class="img-box"></div><p>Item 04</p></a>
+        <a href="item-05.html" class="shop-item"><div class="img-box"></div><p>Item 05</p></a>
+        <a href="item-06.html" class="shop-item"><div class="img-box"></div><p>Item 06</p></a>
+        <a href="item-07.html" class="shop-item"><div class="img-box"></div><p>Item 07</p></a>
+        <a href="item-08.html" class="shop-item"><div class="img-box"></div><p>Item 08</p></a>
+        <a href="item-09.html" class="shop-item"><div class="img-box"></div><p>Item 09</p></a>
+        <a href="item-10.html" class="shop-item"><div class="img-box"></div><p>Item 10</p></a>
+        <a href="item-11.html" class="shop-item"><div class="img-box"></div><p>Item 11</p></a>
+        <a href="item-12.html" class="shop-item"><div class="img-box"></div><p>Item 12</p></a>
+        <a href="item-13.html" class="shop-item"><div class="img-box"></div><p>Item 13</p></a>
+        <a href="item-14.html" class="shop-item"><div class="img-box"></div><p>Item 14</p></a>
+        <a href="item-15.html" class="shop-item"><div class="img-box"></div><p>Item 15</p></a>
+        <a href="item-16.html" class="shop-item"><div class="img-box"></div><p>Item 16</p></a>
+        <a href="item-17.html" class="shop-item"><div class="img-box"></div><p>Item 17</p></a>
+        <a href="item-18.html" class="shop-item"><div class="img-box"></div><p>Item 18</p></a>
     </div>
 
     <script>
         window.addEventListener('load', () => {
-            document.body.classList.add('is-ready');
+            setTimeout(() => {
+                document.body.classList.replace('is-loading', 'is-complete');
+            }, 1200);
         });
     </script>
 </body>
