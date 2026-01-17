@@ -35,6 +35,15 @@
             animation: logoReveal 0.8s ease forwards;
         }
 
+        /* --- 🔥 저작권 문구 (추가됨) --- */
+        .copyright {
+            position: absolute; top: 40px; right: 40px; z-index: 1000;
+            font-size: 0.75rem; color: #999; letter-spacing: 0.05em;
+            opacity: 0;
+            animation: itemAppear 0.8s ease forwards 1.2s; /* 다른 요소들보다 살짝 늦게 등장 */
+            transition: transform 0.3s ease-out, opacity 0.3s ease;
+        }
+
         /* --- 메인 메뉴 --- */
         .main-menu { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 50; }
         .menu-item {
@@ -61,11 +70,14 @@
         .minigame-btn:hover { color: var(--accent-color); transform: scale(1.1); }
 
         /* --- 기존 인터랙션 (:has) --- */
-        .page-wrapper:has(.menu-item:hover) .logo-container {
-            transform: translate(-10px, -10px) scale(0.9);
+        /* 메뉴 호버 시 저작권 문구도 살짝 투명해지도록 추가 */
+        .page-wrapper:has(.menu-item:hover) .logo-container,
+        .page-wrapper:has(.menu-item:hover) .copyright {
+            transform: scale(0.9);
             animation: tremble 0.07s infinite;
-            opacity: 0.5;
+            opacity: 0.3;
         }
+        
         .page-wrapper:has(.menu-item:hover) .minigame-btn {
             opacity: 0.15; transform: translateX(-20px); pointer-events: none;
         }
@@ -81,10 +93,9 @@
             opacity: 1 !important; 
         }
 
-        /* --- 🔥 이스터에그: 우수수 떨어지는 효과 🔥 --- */
+        /* --- 이스터에그: 우수수 떨어지는 효과 --- */
         .fall-down {
             pointer-events: none !important;
-            /* 기존 위치를 완전히 무시하고 화면 아래로 이동 */
             transform: translateY(110vh) rotate(var(--fall-rotate, 20deg)) !important;
             opacity: 0 !important;
             transition: transform 2s cubic-bezier(0.5, 0, 1, 0.5), opacity 1.5s !important;
@@ -104,6 +115,10 @@
             <img src="logo.png" class="main-logo" alt="LOGO" onerror="this.style.display='none'; this.parentElement.innerHTML='LOGO';">
         </div>
 
+        <div class="copyright">
+            Copyright 2026. TaeminKim All rights reserved.
+        </div>
+
         <nav class="main-menu">
             <a href="shop.html" class="menu-item shop">Shop</a>
             <a href="portfolio.html" class="menu-item portfolio">Portfolio</a>
@@ -118,15 +133,13 @@
         const idleLimit = 10000; // 10초
 
         function triggerEasterEgg() {
-            // 떨어뜨릴 모든 요소 선택
-            const targets = document.querySelectorAll('.menu-item, .logo-container, .minigame-btn');
+            // 떨어뜨릴 모든 요소 선택 (.copyright 추가됨)
+            const targets = document.querySelectorAll('.menu-item, .logo-container, .minigame-btn, .copyright');
             
             targets.forEach((el, index) => {
-                // 랜덤한 회전 각도 부여 (--fall-rotate 변수 사용)
-                const randomDeg = Math.floor(Math.random() * 60) - 30; // -30deg ~ 30deg
+                const randomDeg = Math.floor(Math.random() * 60) - 30; 
                 el.style.setProperty('--fall-rotate', `${randomDeg}deg`);
 
-                // 순차적으로 떨어지는 시차 효과
                 setTimeout(() => {
                     el.classList.add('fall-down');
                 }, index * 150);
@@ -134,7 +147,6 @@
         }
 
         function resetTimer() {
-            // 마우스를 움직이면 떨어진 요소 복구
             const fallen = document.querySelectorAll('.fall-down');
             if (fallen.length > 0) {
                 fallen.forEach(el => el.classList.remove('fall-down'));
@@ -144,12 +156,10 @@
             idleTimer = setTimeout(triggerEasterEgg, idleLimit);
         }
 
-        // 활동 감지 리스너
         ['mousemove', 'mousedown', 'keydown', 'touchstart'].forEach(type => {
             window.addEventListener(type, resetTimer);
         });
 
-        // 초기 타이머 실행
         resetTimer();
     </script>
 </body>
