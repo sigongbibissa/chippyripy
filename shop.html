@@ -2,89 +2,83 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Shop - Portfolio</title>
+    <title>Detail - Product 01</title>
     <style>
-        :root {
-            --reveal-speed: 1s;
-            --page-transition: 0.8s;
-        }
-
         body, html {
             margin: 0; padding: 0;
-            width: 100%; height: 100%;
             background-color: #ffffff;
             font-family: 'Times New Roman', serif;
         }
 
-        /* --- 로고 (좌측 상단 제자리 등장) --- */
-        .logo-container {
-            position: fixed; top: 40px; left: 40px;
-            z-index: 1000; opacity: 0;
-            transition: opacity 0.6s ease;
+        /* 상단 네비게이션 */
+        .header {
+            position: fixed; top: 40px; left: 40px; right: 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000;
         }
-        .main-logo { width: 60px; height: auto; cursor: pointer; }
+        .main-logo { width: 60px; height: auto; }
+        .back-link { text-decoration: none; color: #000; font-size: 0.8rem; letter-spacing: 2px; }
 
-        /* --- 중앙 로딩 그래픽 (index와 동일) --- */
-        .loading-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-            z-index: 2000; background-color: #ffffff;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-        .loading-wrap { display: flex; gap: 0; align-items: center; }
-        .loading-wrap img { width: 150px; height: auto; margin: 0 -40px; opacity: 0; }
-
-        /* 로딩 애니메이션 */
-        .is-loading .loading-wrap img { animation: blink 1.2s infinite ease-in-out; }
-        .is-complete .loading-overlay { opacity: 0; visibility: hidden; }
-        .is-complete .logo-container { opacity: 1; }
-
-        /* --- 컨텐츠 영역 --- */
-        .shop-container {
+        /* 상세 컨텐츠 레이아웃 */
+        .content-section {
             padding: 140px 40px 40px;
+            max-width: 1200px; margin: 0 auto;
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
+            grid-template-columns: 1.2fr 1fr; /* 이미지 영역을 조금 더 넓게 */
+            gap: 80px;
             opacity: 0; transform: translateY(20px);
-            transition: all 1s ease 0.3s;
+            transition: all 1s ease;
         }
-        .is-complete .shop-container { opacity: 1; transform: translateY(0); }
+        .is-complete .content-section { opacity: 1; transform: translateY(0); }
 
-        .shop-item { cursor: pointer; text-align: center; }
-        .img-box { width: 100%; aspect-ratio: 1; background-color: #f4f4f4; margin-bottom: 15px; }
-        p { font-size: 0.9rem; color: #333; }
+        /* 상품 이미지 영역 */
+        .product-image {
+            width: 100%; aspect-ratio: 4/5;
+            background-color: #f4f4f4;
+        }
 
-        /* --- 애니메이션 정의 (index 동일) --- */
-        @keyframes blink { 0%, 100% { opacity: 0.1; } 50% { opacity: 1; } }
-        .loading-wrap img:nth-child(1) { animation-delay: 0.0s; }
-        .loading-wrap img:nth-child(2) { animation-delay: 0.2s; }
-        .loading-wrap img:nth-child(3) { animation-delay: 0.4s; }
-        .loading-wrap img:nth-child(4) { animation-delay: 0.6s; }
+        /* 상품 정보 영역 */
+        .product-info h1 {
+            font-size: 2rem; font-weight: normal; margin-top: 0;
+            letter-spacing: -0.02em;
+        }
+        .product-info .price { font-size: 1.2rem; color: #888; margin-bottom: 40px; }
+        .product-info .description {
+            line-height: 1.8; color: #444; font-size: 0.95rem;
+            max-width: 400px;
+        }
+
+        /* 모바일 대응 */
+        @media (max-width: 768px) {
+            .content-section { grid-template-columns: 1fr; gap: 40px; padding-top: 100px; }
+            .header { top: 20px; left: 20px; right: 20px; }
+        }
     </style>
 </head>
-<body class="is-loading">
-    <div class="loading-overlay">
-        <div class="loading-wrap">
-            <img src="loading1.png" alt="L1"><img src="loading2.png" alt="L2">
-            <img src="loading3.png" alt="L3"><img src="loading4.png" alt="L4">
-        </div>
-    </div>
-
-    <div class="logo-container">
+<body>
+    <div class="header">
         <a href="index.html"><img src="logo.png" class="main-logo" alt="Logo"></a>
+        <a href="shop.html" class="back-link">BACK TO SHOP</a>
     </div>
 
-    <div class="shop-container">
-        <div class="shop-item"><div class="img-box"></div><p>Product Item 01</p></div>
-        <div class="shop-item"><div class="img-box"></div><p>Product Item 02</p></div>
-        <div class="shop-item"><div class="img-box"></div><p>Product Item 03</p></div>
+    <div class="content-section">
+        <div class="product-image">
+            </div>
+        <div class="product-info">
+            <h1>Product Item 01</h1>
+            <div class="price">$ 120.00</div>
+            <div class="description">
+                이곳에 상품에 대한 상세한 설명을 적어주세요. <br><br>
+                포트폴리오 용도라면 작업 과정, 사용된 재료, 혹은 작품의 영감에 대해 설명하는 것이 좋습니다. 
+                깔끔한 레이아웃을 위해 문단 사이에 충분한 여백을 두었습니다.
+            </div>
+        </div>
     </div>
 
     <script>
         window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.body.classList.replace('is-loading', 'is-complete');
-            }, 1500);
+            // 상세 페이지는 별도의 로딩 화면 없이 바로 컨텐츠 등장
+            document.body.classList.add('is-complete');
         });
     </script>
 </body>
