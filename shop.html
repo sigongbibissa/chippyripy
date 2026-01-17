@@ -2,83 +2,63 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Detail - Product 01</title>
+    <title>Product 01 - Detail</title>
     <style>
         body, html {
             margin: 0; padding: 0;
             background-color: #ffffff;
             font-family: 'Times New Roman', serif;
         }
-
-        /* 상단 네비게이션 */
+        
+        /* 상단 헤더 */
         .header {
             position: fixed; top: 40px; left: 40px; right: 40px;
             display: flex; justify-content: space-between; align-items: center;
             z-index: 1000;
         }
         .main-logo { width: 60px; height: auto; }
-        .back-link { text-decoration: none; color: #000; font-size: 0.8rem; letter-spacing: 2px; }
+        .back-btn { text-decoration: none; color: #000; font-size: 0.8rem; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 2px; }
 
-        /* 상세 컨텐츠 레이아웃 */
-        .content-section {
-            padding: 140px 40px 40px;
+        /* 컨텐츠 */
+        .detail-wrapper {
+            padding: 140px 40px;
             max-width: 1200px; margin: 0 auto;
             display: grid;
-            grid-template-columns: 1.2fr 1fr; /* 이미지 영역을 조금 더 넓게 */
-            gap: 80px;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
             opacity: 0; transform: translateY(20px);
             transition: all 1s ease;
         }
-        .is-complete .content-section { opacity: 1; transform: translateY(0); }
+        .is-ready .detail-wrapper { opacity: 1; transform: translateY(0); }
 
-        /* 상품 이미지 영역 */
-        .product-image {
-            width: 100%; aspect-ratio: 4/5;
-            background-color: #f4f4f4;
-        }
+        .detail-img { width: 100%; aspect-ratio: 1/1.2; background-color: #f4f4f4; }
+        .detail-info h1 { font-size: 2rem; font-weight: normal; margin: 0 0 20px; }
+        .detail-info p { line-height: 1.8; color: #555; font-size: 1rem; }
 
-        /* 상품 정보 영역 */
-        .product-info h1 {
-            font-size: 2rem; font-weight: normal; margin-top: 0;
-            letter-spacing: -0.02em;
-        }
-        .product-info .price { font-size: 1.2rem; color: #888; margin-bottom: 40px; }
-        .product-info .description {
-            line-height: 1.8; color: #444; font-size: 0.95rem;
-            max-width: 400px;
-        }
-
-        /* 모바일 대응 */
         @media (max-width: 768px) {
-            .content-section { grid-template-columns: 1fr; gap: 40px; padding-top: 100px; }
-            .header { top: 20px; left: 20px; right: 20px; }
+            .detail-wrapper { grid-template-columns: 1fr; padding: 100px 20px; }
         }
     </style>
 </head>
 <body>
     <div class="header">
         <a href="index.html"><img src="logo.png" class="main-logo" alt="Logo"></a>
-        <a href="shop.html" class="back-link">BACK TO SHOP</a>
+        <a href="shop.html" class="back-btn">BACK TO LIST</a>
     </div>
 
-    <div class="content-section">
-        <div class="product-image">
+    <div class="detail-wrapper">
+        <div class="detail-img">
             </div>
-        <div class="product-info">
+        <div class="detail-info">
             <h1>Product Item 01</h1>
-            <div class="price">$ 120.00</div>
-            <div class="description">
-                이곳에 상품에 대한 상세한 설명을 적어주세요. <br><br>
-                포트폴리오 용도라면 작업 과정, 사용된 재료, 혹은 작품의 영감에 대해 설명하는 것이 좋습니다. 
-                깔끔한 레이아웃을 위해 문단 사이에 충분한 여백을 두었습니다.
-            </div>
+            <p>여기에 상품 상세 설명을 입력하세요. <br><br>
+               디자인 철학이나 사용된 기술, 브랜드 스토리를 적으면 포트폴리오의 완성도가 높아집니다.</p>
         </div>
     </div>
 
     <script>
         window.addEventListener('load', () => {
-            // 상세 페이지는 별도의 로딩 화면 없이 바로 컨텐츠 등장
-            document.body.classList.add('is-complete');
+            document.body.classList.add('is-ready');
         });
     </script>
 </body>
