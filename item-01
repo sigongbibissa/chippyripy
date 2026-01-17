@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Product 01 - Detail</title>
+    <style>
+        body, html {
+            margin: 0; padding: 0;
+            background-color: #ffffff;
+            font-family: 'Times New Roman', serif;
+        }
+        
+        /* 로고 및 뒤로가기 */
+        .header {
+            position: fixed; top: 40px; left: 40px; right: 40px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000;
+        }
+        .main-logo { width: 60px; height: auto; }
+        .back-btn { text-decoration: none; color: #000; font-size: 0.9rem; letter-spacing: 1px; }
+
+        /* 상세 컨텐츠 */
+        .detail-container {
+            padding: 140px 40px;
+            max-width: 1000px; margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            opacity: 0; transform: translateY(20px);
+            transition: all 1s ease;
+        }
+        .is-complete .detail-container { opacity: 1; transform: translateY(0); }
+
+        .detail-img { width: 100%; aspect-ratio: 1; background-color: #f4f4f4; }
+        .detail-info h1 { font-size: 1.5rem; font-weight: normal; margin-bottom: 20px; }
+        .detail-info p { line-height: 1.6; color: #666; font-size: 0.95rem; }
+
+        @media (max-width: 768px) {
+            .detail-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="is-loading">
+    <div class="header">
+        <a href="index.html"><img src="logo.png" class="main-logo" alt="Logo"></a>
+        <a href="shop.html" class="back-btn">BACK TO SHOP</a>
+    </div>
+
+    <div class="detail-container">
+        <div class="detail-img">
+            </div>
+        <div class="detail-info">
+            <h1>Product Item 01</h1>
+            <p>이 상품에 대한 상세 설명을 여기에 적어주세요. <br>
+               디자인의 의도나 소재, 작업 방식 등을 자유롭게 서술하여 <br>
+               포트폴리오의 깊이를 더할 수 있습니다.</p>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', () => {
+            document.body.classList.add('is-complete');
+        });
+    </script>
+</body>
+</html>
