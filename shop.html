@@ -13,7 +13,6 @@
             width: 100%; height: 100%;
             background-color: #ffffff;
             font-family: 'Times New Roman', serif;
-            /* 가로 스크롤 방지 */
             overflow-x: hidden; 
         }
 
@@ -48,11 +47,10 @@
         .is-complete .logo-container { opacity: 1; }
         .main-logo { width: 60px; height: auto; }
 
-        /* --- 3. 컨텐츠 영역 (그리드 유지) --- */
+        /* --- 3. 컨텐츠 영역 --- */
         .shop-container {
             padding: 140px 40px 80px;
             display: grid;
-            /* 화면 크기에 상관없이 3열 유지 */
             grid-template-columns: repeat(3, 1fr); 
             gap: 60px 20px;
             opacity: 0; transform: translateY(20px);
@@ -62,7 +60,7 @@
         }
         .is-complete .shop-container { opacity: 1; transform: translateY(0); }
 
-        /* --- 4. 상품 아이템 & 텍스트 애니메이션 --- */
+        /* --- 4. 상품 아이템 & 이미지 --- */
         .shop-item { 
             text-decoration: none; 
             color: inherit; 
@@ -74,15 +72,28 @@
         }
 
         .img-box { 
-            width: 70%; 
-            aspect-ratio: 1; 
-            background-color: #ffffff; 
+            width: 80%; /* 박스 크기 조절 */
+            aspect-ratio: 1; /* 정사각형 유지 */
+            background-color: #f7f7f7; 
             margin-bottom: 15px; 
+            overflow: hidden; /* 이미지가 넘치지 않게 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
             transition: background-color 0.4s ease;
         }
 
-        .shop-item:hover .img-box { 
-            background-color: #e8e8e8; 
+        /*  */
+        .img-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 비율 유지하며 꽉 채우기 */
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease;
+        }
+
+        .shop-item:hover .img-box img {
+            transform: scale(1.08); /* 호버 시 약간 확대 */
+            opacity: 0.85;
         }
 
         .shop-item p { 
@@ -100,8 +111,6 @@
             opacity: 1;
             transform: translateY(0);
         }
-
-        /* @media 반응형 코드가 삭제되었습니다. */
     </style>
 </head>
 <body class="is-loading">
@@ -118,28 +127,29 @@
     </div>
 
     <div class="shop-container">
-        <a href="item-01.html" class="shop-item"><div class="img-box"></div><p>Item 01</p></a>
-        <a href="item-02.html" class="shop-item"><div class="img-box"></div><p>Item 02</p></a>
-        <a href="item-03.html" class="shop-item"><div class="img-box"></div><p>Item 03</p></a>
-        <a href="item-04.html" class="shop-item"><div class="img-box"></div><p>Item 04</p></a>
-        <a href="item-05.html" class="shop-item"><div class="img-box"></div><p>Item 05</p></a>
-        <a href="item-06.html" class="shop-item"><div class="img-box"></div><p>Item 06</p></a>
-        <a href="item-07.html" class="shop-item"><div class="img-box"></div><p>Item 07</p></a>
-        <a href="item-08.html" class="shop-item"><div class="img-box"></div><p>Item 08</p></a>
-        <a href="item-09.html" class="shop-item"><div class="img-box"></div><p>Item 09</p></a>
-        <a href="item-10.html" class="shop-item"><div class="img-box"></div><p>Item 10</p></a>
-        <a href="item-11.html" class="shop-item"><div class="img-box"></div><p>Item 11</p></a>
-        <a href="item-12.html" class="shop-item"><div class="img-box"></div><p>Item 12</p></a>
-        <a href="item-13.html" class="shop-item"><div class="img-box"></div><p>Item 13</p></a>
-        <a href="item-14.html" class="shop-item"><div class="img-box"></div><p>Item 14</p></a>
-        <a href="item-15.html" class="shop-item"><div class="img-box"></div><p>Item 15</p></a>
-        <a href="item-16.html" class="shop-item"><div class="img-box"></div><p>Item 16</p></a>
-        <a href="item-17.html" class="shop-item"><div class="img-box"></div><p>Item 17</p></a>
-        <a href="item-18.html" class="shop-item"><div class="img-box"></div><p>Item 18</p></a>
+        <a href="item-01.html" class="shop-item"><div class="img-box"><img src="item01.jpg" alt="Item 01"></div><p>Item 01</p></a>
+        <a href="item-02.html" class="shop-item"><div class="img-box"><img src="item02.jpg" alt="Item 02"></div><p>Item 02</p></a>
+        <a href="item-03.html" class="shop-item"><div class="img-box"><img src="item03.jpg" alt="Item 03"></div><p>Item 03</p></a>
+        <a href="item-04.html" class="shop-item"><div class="img-box"><img src="item04.jpg" alt="Item 04"></div><p>Item 04</p></a>
+        <a href="item-05.html" class="shop-item"><div class="img-box"><img src="item05.jpg" alt="Item 05"></div><p>Item 05</p></a>
+        <a href="item-06.html" class="shop-item"><div class="img-box"><img src="item06.jpg" alt="Item 06"></div><p>Item 06</p></a>
+        <a href="item-07.html" class="shop-item"><div class="img-box"><img src="item07.jpg" alt="Item 07"></div><p>Item 07</p></a>
+        <a href="item-08.html" class="shop-item"><div class="img-box"><img src="item08.jpg" alt="Item 08"></div><p>Item 08</p></a>
+        <a href="item-09.html" class="shop-item"><div class="img-box"><img src="item09.jpg" alt="Item 09"></div><p>Item 09</p></a>
+        <a href="item-10.html" class="shop-item"><div class="img-box"><img src="item10.jpg" alt="Item 10"></div><p>Item 10</p></a>
+        <a href="item-11.html" class="shop-item"><div class="img-box"><img src="item11.jpg" alt="Item 11"></div><p>Item 11</p></a>
+        <a href="item-12.html" class="shop-item"><div class="img-box"><img src="item12.jpg" alt="Item 12"></div><p>Item 12</p></a>
+        <a href="item-13.html" class="shop-item"><div class="img-box"><img src="item13.jpg" alt="Item 13"></div><p>Item 13</p></a>
+        <a href="item-14.html" class="shop-item"><div class="img-box"><img src="item14.jpg" alt="Item 14"></div><p>Item 14</p></a>
+        <a href="item-15.html" class="shop-item"><div class="img-box"><img src="item15.jpg" alt="Item 15"></div><p>Item 15</p></a>
+        <a href="item-16.html" class="shop-item"><div class="img-box"><img src="item16.jpg" alt="Item 16"></div><p>Item 16</p></a>
+        <a href="item-17.html" class="shop-item"><div class="img-box"><img src="item17.jpg" alt="Item 17"></div><p>Item 17</p></a>
+        <a href="item-18.html" class="shop-item"><div class="img-box"><img src="item18.jpg" alt="Item 18"></div><p>Item 18</p></a>
     </div>
 
     <script>
         window.addEventListener('load', () => {
+            // 모든 리소스 로드 후 1.2초 뒤에 화면 표시
             setTimeout(() => {
                 document.body.classList.replace('is-loading', 'is-complete');
             }, 1200);
@@ -147,6 +157,3 @@
     </script>
 </body>
 </html>
-
-
-
