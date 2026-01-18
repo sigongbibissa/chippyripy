@@ -22,31 +22,37 @@
 
         img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
 
-        /* --- 상단 내비게이션 (중앙 정렬 유지) --- */
+        /* --- 상단 내비게이션 구조 수정 --- */
         .header-nav {
             position: fixed;
             top: 40px;
             left: 0;
+            width: 100%;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.6s ease 0.5s;
+            display: flex;
+            flex-direction: column; /* 요소를 세로로 층을 나눔 */
+            align-items: center;
+        }
+        .is-complete .header-nav { opacity: 1; }
+
+        /* 로고와 메뉴가 있는 상단 라인 */
+        .nav-top-row {
             width: 100%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 0 40px;
             box-sizing: border-box;
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.6s ease 0.5s;
         }
-        .is-complete .header-nav { opacity: 1; }
 
-        .nav-left, .nav-center, .nav-right {
-            flex: 1;
+        /* 스위치가 위치하는 하단 라인 (한 칸 내림) */
+        .nav-bottom-row {
+            margin-top: 30px; /* 상단 메뉴와의 간격 (한 칸 내림) */
             display: flex;
-            align-items: center;
+            justify-content: center;
         }
-
-        .nav-center { justify-content: center; }
-        .nav-right { justify-content: flex-end; gap: 25px; }
 
         .main-logo { width: 50px; height: auto; cursor: pointer; pointer-events: auto !important; }
 
@@ -60,10 +66,10 @@
         }
         .filter-btn.active, .filter-btn:hover { opacity: 1; }
 
-        /* --- 스위치 스타일 (이미지 기반 수정) --- */
+        /* --- 스위치 그래픽 (이전 디자인 + 상하 배치) --- */
         .view-switch-wrapper {
             display: flex; 
-            flex-direction: column; /* 세로 배치: 글자를 위로 */
+            flex-direction: column; /* 글자 아래 버튼 배치 */
             align-items: center; 
             gap: 8px; 
             cursor: pointer;
@@ -73,13 +79,13 @@
             letter-spacing: 0.05em; 
             color: var(--accent-color);
             font-family: 'Garamond', serif;
-            text-transform: capitalize; /* 첫 글자만 대문자 */
+            text-transform: capitalize;
         }
         .switch-track {
             width: 36px; 
             height: 18px; 
             background-color: #fff; 
-            border: 2px solid #000; /* 검은색 테두리 */
+            border: 2px solid #000; /* 검은색 테두리 그래픽 */
             border-radius: 20px; 
             position: relative; 
             transition: all 0.3s;
@@ -87,17 +93,17 @@
         .switch-thumb {
             width: 12px; 
             height: 12px; 
-            background-color: #000; /* 검은색 버튼 */
+            background-color: #000; /* 검은색 원형 버튼 */
             border-radius: 50%; 
             position: absolute; 
-            top: 3px; 
+            top: 1px; /* 테두리 두께 고려하여 중앙 배치 */
             left: 3px;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
         /* 스위치 On 상태 */
         .view-switch-wrapper.on .switch-thumb { transform: translateX(18px); }
 
-        /* --- 로딩 및 기타 레이아웃 --- */
+        /* --- 로딩 애니메이션 --- */
         .loading-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
@@ -114,9 +120,11 @@
         .loading-wrap img:nth-child(4) { animation-delay: 0.9s; }
         .is-complete .loading-overlay { opacity: 0; visibility: hidden; }
 
+        /* --- 워크 컨테이너 (여백 조정) --- */
         .work-container {
             width: 100%; max-width: 1400px; margin: 0 auto;
-            padding: 200px 40px; box-sizing: border-box;
+            padding: 240px 40px 200px; /* 헤더가 내려왔으므로 상단 여백 추가 */
+            box-sizing: border-box;
             display: grid; grid-template-columns: repeat(12, 1fr);
             gap: 160px 40px; opacity: 0; transform: translateY(30px);
             transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
@@ -167,10 +175,11 @@
 
         /* 모바일 대응 */
         @media (max-width: 768px) {
-            .header-nav { padding: 0 20px; top: 20px; }
-            .nav-right { gap: 10px; }
+            .header-nav { top: 20px; }
+            .nav-top-row { padding: 0 20px; }
+            .nav-bottom-row { margin-top: 20px; }
             .filter-btn { font-size: 0.5rem; letter-spacing: 0.05em; }
-            .work-container { padding-top: 150px; gap: 80px 20px; }
+            .work-container { padding-top: 180px; gap: 80px 20px; }
         }
     </style>
 </head>
@@ -184,25 +193,26 @@
     </div>
 
     <header class="header-nav">
-        <div class="nav-left">
-            <a href="index.html"><img src="logo.png" class="main-logo" alt="Logo"></a>
+        <div class="nav-top-row">
+            <div class="nav-left">
+                <a href="index.html"><img src="logo.png" class="main-logo" alt="Logo"></a>
+            </div>
+            <div class="nav-right">
+                <div class="filter-container">
+                    <button class="filter-btn active" data-filter="all">ALL</button>
+                    <button class="filter-btn" data-filter="architecture">ARCHITECTURE</button>
+                    <button class="filter-btn" data-filter="jewelry">JEWELRY</button>
+                    <button class="filter-btn" data-filter="furniture">FURNITURE</button>
+                </div>
+            </div>
         </div>
         
-        <div class="nav-center">
+        <div class="nav-bottom-row">
             <div class="view-switch-wrapper" id="view-toggle">
                 <span class="switch-label">Preview</span>
                 <div class="switch-track">
                     <div class="switch-thumb"></div>
                 </div>
-            </div>
-        </div>
-
-        <div class="nav-right">
-            <div class="filter-container">
-                <button class="filter-btn active" data-filter="all">ALL</button>
-                <button class="filter-btn" data-filter="architecture">ARCHITECTURE</button>
-                <button class="filter-btn" data-filter="jewelry">JEWELRY</button>
-                <button class="filter-btn" data-filter="furniture">FURNITURE</button>
             </div>
         </div>
     </header>
@@ -265,14 +275,12 @@
     </div>
 
     <script>
-        // 로딩 제어
         window.addEventListener('load', function() {
             setTimeout(() => {
                 document.body.classList.replace('is-loading', 'is-complete');
             }, 1500);
         });
 
-        // 필터링 로직
         const filterBtns = document.querySelectorAll('.filter-btn');
         const workItems = document.querySelectorAll('.work-item');
         const workGrid = document.getElementById('work-grid');
@@ -294,14 +302,12 @@
             });
         });
 
-        // 스위치 로직
         const viewToggle = document.getElementById('view-toggle');
         viewToggle.addEventListener('click', function() {
             this.classList.toggle('on');
             workGrid.classList.toggle('mode-preview');
         });
 
-        // 모바일 터치
         workItems.forEach(item => {
             item.addEventListener('touchstart', function() {
                 this.classList.add('is-active');
