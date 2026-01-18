@@ -44,8 +44,12 @@
             opacity: 0; transition: opacity 1s ease 0.5s; padding-top: 150px; /* 라벨이 빠진 만큼 여백 소폭 조정 */
         }
         .is-complete .project-content { opacity: 1; }
-        .img-wrapper { width: 100%; max-width: 1200px; position: relative; line-height: 0; }
-        .img-wrapper img { width: 100%; height: auto; display: block; -webkit-user-drag: none; }
+        .img-wrapper { width: 100%; 
+    max-width: 1200px; 
+    margin: 0 auto; /* ★ 좌우 여백을 자동으로 채워 중앙으로 보냅니다 */
+    position: relative; 
+    line-height: 0; }
+        .img-wrapper img { width: 100%; max-width: 1200px; position: relative; line-height: 0; }
         
         /* 이미지 보호막 (우클릭 방지) */
         .img-wrapper::after { 
@@ -72,8 +76,7 @@
         <div class="img-wrapper"><img src="sun2.jpg" alt="Detail 02"></div>
         <div class="img-wrapper"><img src="sun3.jpg" alt="Detail 03"></div>
         <div class="img-wrapper"><img src="sun4.jpg" alt="Detail 04"></div>
-        <div class="img-wrapper"><img src="poster.jpg" alt="Detail 04"></div>
-
+        <div class="img-wrapper"><img src="poster.jpg" alt="Detail 05"></div>
     </div>
 
     <script>
@@ -83,5 +86,5 @@
         document.addEventListener('contextmenu', e => e.preventDefault());
     </script>
 </body>
-</html>
 
+</html>
