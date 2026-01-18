@@ -1,3 +1,5 @@
+
+Gemini와의 대화
 <!DOCTYPE html>
 
 <html lang="ko">
@@ -8,10 +10,6 @@
 
     <title>Portfolio - Work Snap</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500&display=swap" rel="stylesheet">
-
-    
-
     <style>
 
         :root {
@@ -19,10 +17,6 @@
             --reveal-speed: 1s;
 
             --page-transition: 0.8s;
-
-            --accent-color: #1a1a1a;
-
-            --main-font: 'EB Garamond', serif;
 
         }
 
@@ -36,107 +30,33 @@
 
             background-color: #ffffff;
 
-            font-family: var(--main-font);
+            font-family: 'Garamond', serif;
 
             overflow-y: auto; overflow-x: hidden;
 
             -webkit-user-select: none; user-select: none;
 
-            -webkit-touch-callout: none;
-
-            color: var(--accent-color);
-
         }
 
 
 
-        /* --- 링크 스타일 --- */
-
-        a, a:link, a:visited, a:hover, a:active {
-
-            text-decoration: none !important;
-
-            color: #1a1a1a !important;
-
-            outline: none;
-
-        }
+        img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
 
 
 
-        /* --- 이미지 렌더링 최적화 (깨짐 방지 수정) --- */
+        /* --- 로고 및 로딩 --- */
 
-        img, svg {
+        .logo-container {
 
-            -webkit-user-drag: none; 
+            position: fixed; top: 40px; left: 40px; z-index: 1000;
 
-            user-drag: none; 
-
-            pointer-events: none;
-
-            /* crisp-edges 대신 auto를 사용하여 부드럽게 처리 */
-
-            image-rendering: auto; 
-
-            shape-rendering: geometricPrecision;
+            opacity: 0; transition: opacity 0.6s ease;
 
         }
 
+        .main-logo { width: 50px; height: auto; cursor: pointer; pointer-events: auto !important; }
 
 
-        /* --- 상단 고정 헤더 --- */
-
-        .fixed-header {
-
-            position: fixed;
-
-            top: 40px; left: 0; width: 100%; z-index: 1000;
-
-            display: flex; justify-content: space-between; align-items: center;
-
-            padding: 0 40px; box-sizing: border-box;
-
-            opacity: 0; transition: opacity 0.6s ease 0.5s;
-
-            background-color: transparent;
-
-            pointer-events: none;
-
-        }
-
-        .is-complete .fixed-header { opacity: 1; }
-
-        .nav-left, .nav-right { pointer-events: auto; }
-
-
-
-        .main-logo { width: 50px; height: auto; cursor: pointer; }
-
-
-
-        .filter-container { display: flex; gap: 20px; }
-
-        .filter-btn {
-
-            background: none; border: none;
-
-            font-family: var(--main-font); 
-
-            font-size: 0.7rem; 
-
-            letter-spacing: 0.15em; color: var(--accent-color);
-
-            cursor: pointer; padding: 0; opacity: 0.4;
-
-            transition: opacity 0.3s ease;
-
-        }
-
-        .filter-btn.active, .filter-btn:hover { opacity: 1; }
-
-
-
-        /* --- 로딩 애니메이션 --- */
 
         .loading-overlay {
 
@@ -156,6 +76,8 @@
 
         .is-loading .loading-wrap img { animation: wave 1.2s infinite ease-in-out; }
 
+        @keyframes wave { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+
         .loading-wrap img:nth-child(1) { animation-delay: 0.0s; }
 
         .loading-wrap img:nth-child(2) { animation-delay: 0.3s; }
@@ -164,141 +86,135 @@
 
         .loading-wrap img:nth-child(4) { animation-delay: 0.9s; }
 
-
-
-        @keyframes wave { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
-
         .is-complete .loading-overlay { opacity: 0; visibility: hidden; }
 
-
-
-        /* --- 본문 영역 --- */
-
-        .scroll-section {
-
-            width: 100%; padding-top: 150px;
-
-            display: flex; flex-direction: column; align-items: center;
-
-            opacity: 0; transition: opacity 1s ease 0.3s;
-
-        }
-
-        .is-complete .scroll-section { opacity: 1; }
+        .is-complete .logo-container { opacity: 1; }
 
 
 
-        .switch-container { margin-bottom: 60px; display: flex; justify-content: center; }
+        /* --- 필터/소팅 UI --- */
 
+        .filter-container {
 
+            position: fixed; top: 45px; right: 40px; z-index: 1000;
 
-        .view-switch-wrapper {
+            display: flex; gap: 20px; opacity: 0;
 
-            display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer;
+            transition: opacity 0.6s ease 0.5s;
 
         }
 
-        .switch-label {
+        .is-complete .filter-container { opacity: 1; }
 
-            font-size: 0.75rem; letter-spacing: 0.05em; color: var(--accent-color);
 
-            font-family: var(--main-font); opacity: 0.6;
 
-        }
+        .filter-btn {
 
-        .switch-track {
+            background: none; border: none;
 
-            width: 32px; height: 16px; background-color: #eee;
+            font-family: 'Garamond', serif; font-size: 0.65rem;
 
-            border-radius: 15px; position: relative; transition: background-color 0.3s;
+            letter-spacing: 0.15em; color: #1a1a1a;
 
-        }
+            cursor: pointer; padding: 0; opacity: 0.4;
 
-        .switch-thumb {
-
-            width: 12px; height: 12px; background-color: #fff;
-
-            border-radius: 50%; position: absolute; top: 2px; left: 2px;
-
-            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: opacity 0.3s ease;
 
         }
 
-        .view-switch-wrapper.on .switch-track { background-color: var(--accent-color); }
-
-        .view-switch-wrapper.on .switch-thumb { transform: translateX(16px); }
-
-        .view-switch-wrapper.on .switch-label { opacity: 1; font-weight: bold; }
+        .filter-btn.active, .filter-btn:hover { opacity: 1; }
 
 
 
-        /* --- 워크 그리드 --- */
+        /* --- 워크 컨테이너 --- */
 
         .work-container {
 
             width: 100%; max-width: 1400px; margin: 0 auto;
 
-            padding: 0 40px 100px; box-sizing: border-box;
+            padding: 200px 40px; box-sizing: border-box;
 
             display: grid; grid-template-columns: repeat(12, 1fr);
 
-            gap: 160px 40px;
+            gap: 160px 40px; opacity: 0; transform: translateY(30px);
+
+            transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
+
+        }
+
+        .is-complete .work-container { opacity: 1; visibility: visible; transform: translateY(0); }
+
+
+
+        /* --- 워크 아이템 공통 및 링크 스타일 --- */
+
+        .work-item { 
+
+            display: flex; flex-direction: column; position: relative; cursor: pointer;
+
+            transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
+
+        }
+
+        /* 링크가 레이아웃을 해치지 않게 설정 */
+
+        .work-item a { text-decoration: none; color: inherit; display: contents; }
+
+
+
+        .work-item.hidden {
+
+            opacity: 0; visibility: hidden;
+
+            transform: translateY(20px) scale(0.95);
+
+            pointer-events: none; position: absolute;
 
         }
 
 
 
-        .work-item { display: flex; flex-direction: column; position: relative; cursor: pointer; }
+        .img-box { 
 
-        .img-box { width: 100%; background-color: #fcfcfc; margin-bottom: 15px; overflow: hidden; position: relative; }
+            width: 100%; background-color: #000000; margin-bottom: 15px; 
 
-        
+            opacity: 1; overflow: hidden; position: relative;
 
-        .img-box img { 
-
-            width: 100%; height: 100%; object-fit: cover; display: block; 
-
-            transition: opacity 0.6s ease;
-
-            /* 개별 이미지에서도 선명화 옵션을 제거하여 깨짐 방지 */
-
-            image-rendering: auto; 
+            transition: opacity 0.4s ease, transform 0.2s ease;
 
         }
 
-        .img-box img.hover-img { position: absolute; top: 0; left: 0; opacity: 0; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        .img-box::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; background: rgba(0,0,0,0); }
 
 
 
-        .work-item:hover .img-box img.main-img, 
+        /* 호버 효과 */
 
-        .work-item.is-active .img-box img.main-img, 
+        .work-item:hover .img-box { opacity: 0.05; }
 
-        .work-container.mode-preview .main-img { opacity: 0; }
-
-
-
-        .work-item:hover .img-box img.hover-img, 
-
-        .work-item.is-active .img-box img.hover-img, 
-
-        .work-container.mode-preview .hover-img { opacity: 1; }
+        .work-item:active .img-box { transform: scale(1.05); opacity: 1; }
 
 
 
         .work-item h2 { 
 
-            font-family: var(--main-font); font-weight: normal; font-size: 0.65rem; 
+            font-weight: normal; font-size: 0.55rem; letter-spacing: 0.2em; 
 
-            letter-spacing: 0.2em; color: #1a1a1a; margin: 0; text-align: center;
+            color: #1a1a1a; margin: 0; text-align: center;
+
+            opacity: 0; transform: translateY(5px);
+
+            transition: all 0.4s ease;
 
         }
 
+        .work-item:hover h2 { opacity: 1; transform: translateY(0); }
 
 
-        /* 그리드 배치 */
+
+        /* 배치 설정 (그리드 레이아웃) */
 
         .item-1 { grid-column: 3 / 7; margin-top: 40px; } .item-1 .img-box { aspect-ratio: 16 / 10; }
 
@@ -312,17 +228,7 @@
 
         .item-6 { grid-column: 7 / 12; margin-top: 40px; } .item-6 .img-box { aspect-ratio: 4 / 3; }
 
-
-
-        @media (max-width: 768px) {
-
-            .fixed-header { top: 20px; padding: 0 20px; }
-
-            .scroll-section { padding-top: 120px; }
-
-            .work-container { gap: 80px 20px; }
-
-        }
+        .item-7 { grid-column: 2 / 7; margin-top: 20px; } .item-6 .img-box { aspect-ratio: 4 / 3; }
 
     </style>
 
@@ -336,7 +242,9 @@
 
         <div class="loading-wrap">
 
-            <img src="loading1.png" alt="L1"><img src="loading2.png" alt="L2"><img src="loading3.png" alt="L3"><img src="loading4.png" alt="L4">
+            <img src="loading1.png" alt="L1"><img src="loading2.png" alt="L2">
+
+            <img src="loading3.png" alt="L3"><img src="loading4.png" alt="L4">
 
         </div>
 
@@ -344,149 +252,137 @@
 
 
 
-    <header class="fixed-header">
+    <div class="filter-container">
 
-        <div class="nav-left">
+        <button class="filter-btn active" data-filter="all">ALL</button>
 
-            <a href="index.html"><img src="logo.png" class="main-logo" alt="Logo"></a>
+        <button class="filter-btn" data-filter="architecture">ARCHITECTURE</button>
 
-        </div>
+        <button class="filter-btn" data-filter="jewelry">JEWELRY</button>
 
-        <div class="nav-right">
+        <button class="filter-btn" data-filter="furniture">FURNITURE</button>
 
-            <div class="filter-container">
+    </div>
 
-                <button class="filter-btn active" data-filter="all">ALL</button>
 
-                <button class="filter-btn" data-filter="architecture">ARCHITECTURE</button>
 
-                <button class="filter-btn" data-filter="jewelry">JEWELRY</button>
+    <div class="logo-container">
 
-                <button class="filter-btn" data-filter="furniture">FURNITURE</button>
+        <a href="index.html"><img src="logo.png" class="main-logo" alt="Logo"></a>
 
-            </div>
+    </div>
 
-        </div>
 
-    </header>
 
+    <div class="work-container">
 
+        <section class="work-item item-1" data-category="architecture">
 
-    <main class="scroll-section">
+            <a href="project01.html">
 
-        <div class="switch-container">
+                <div class="img-box"><img src="main.jpg" alt="Arco Art Library"></div>
 
-            <div class="view-switch-wrapper" id="view-toggle">
+                <h2>Arco Art Library-Architectural Renovation</h2>
 
-                <span class="switch-label">Preview</span>
+            </a>
 
-                <div class="switch-track">
+        </section>
 
-                    <div class="switch-thumb"></div>
 
-                </div>
 
-            </div>
+        <section class="work-item item-2" data-category="furniture">
 
-        </div>
+            <a href="project02.html">
 
+                <div class="img-box"><img src="LZ_main.jpg" alt="On the ceiling"></div>
 
+                <h2>On the ceiling</h2>
 
-        <div class="work-container" id="work-grid">
+            </a>
 
-            <section class="work-item item-1" data-category="architecture">
+        </section>
 
-                <a href="project01.html">
 
-                    <div class="img-box"><img src="대지 2sec.png" class="main-img"><img src="main.jpg" class="hover-img"></div>
 
-                    <h2>Arco Art Library-Architectural Renovation</h2>
+        <section class="work-item item-3" data-category="JEWELRY">
 
-                </a>
+            <a href="project03.html">
 
-            </section>
+                <div class="img-box"><img src="or_main.jpg" alt="Ornament is sublime"></div>
 
-            <section class="work-item item-2" data-category="furniture">
+                <h2>Ornament is sublime</h2>
 
-                <a href="project02.html">
+            </a>
 
-                    <div class="img-box"><img src="아트보드 1LZ.png" class="main-img"><img src="LZ_main.jpg" class="hover-img"></div>
+        </section>
 
-                    <h2>On the ceiling</h2>
 
-                </a>
 
-            </section>
+        <section class="work-item item-4" data-category="architecture">
 
-            <section class="work-item item-3" data-category="jewelry">
+            <a href="project04.html">
 
-                <a href="project03.html">
+                <div class="img-box"><img src="발명제안서 렌더 바탕 50투명도.png" alt="Sliding Library"></div>
 
-                    <div class="img-box"><img src="or_main.jpg" class="main-img"><img src="or_main.jpg" class="hover-img"></div>
+                <h2>Sliding Library</h2>
 
-                    <h2>Ornament is sublime</h2>
+            </a>
 
-                </a>
+        </section>
 
-            </section>
 
-            <section class="work-item item-4" data-category="architecture">
 
-                <a href="project04.html">
+        <section class="work-item item-5" data-category="architecture">
 
-                    <div class="img-box"><img src="대지 2jl.png" class="main-img"><img src="발명제안서 렌더 바탕 50투명도.png" class="hover-img"></div>
+            <a href="project05.html">
 
-                    <h2>Sliding Library</h2>
+                <div class="img-box"><img src="mainshot.jpg" alt="Suwon crafting village"></div>
 
-                </a>
+                <h2>Suwon crafting village</h2>
 
-            </section>
+            </a>
 
-            <section class="work-item item-5" data-category="architecture">
+        </section>
 
-                <a href="project05.html">
 
-                    <div class="img-box"><img src="아트보드 1 사본lks.png" class="main-img"><img src="mainshot.jpg" class="hover-img"></div>
 
-                    <h2>Suwon crafting village</h2>
+        <section class="work-item item-6" data-category="furniture">
 
-                </a>
+            <a href="project06.html">
 
-            </section>
+                <div class="img-box"></div>
 
-            <section class="work-item item-6" data-category="furniture">
+                <h2>06. MINIMALIST DESK</h2>
 
-                <a href="project06.html">
+            </a>
 
-                    <div class="img-box"><img src="desk_main.jpg" class="main-img"><img src="desk_hover.jpg" class="hover-img"></div>
+        </section>
 
-                    <h2>06. MINIMALIST DESK</h2>
-
-                </a>
-
-            </section>
-
-        </div>
-
-    </main>
+    </div>
 
 
 
     <script>
 
+        // 로딩 제어
+
         window.addEventListener('load', function() {
 
-            setTimeout(() => { document.body.classList.replace('is-loading', 'is-complete'); }, 1200);
+            setTimeout(() => {
+
+                document.body.classList.replace('is-loading', 'is-complete');
+
+            }, 1500);
 
         });
 
 
 
+        // 소팅(필터링) 로직
+
         const filterBtns = document.querySelectorAll('.filter-btn');
 
         const workItems = document.querySelectorAll('.work-item');
-
-        const workGrid = document.getElementById('work-grid');
 
 
 
@@ -498,63 +394,27 @@
 
                 btn.classList.add('active');
 
-                const filterValue = btn.getAttribute('data-filter').toLowerCase();
+
+
+                const filterValue = btn.getAttribute('data-filter');
+
+
 
                 workItems.forEach(item => {
 
-                    const category = item.getAttribute('data-category').toLowerCase();
+                    const category = item.getAttribute('data-category');
 
                     if (filterValue === 'all' || filterValue === category) {
 
-                        item.style.display = "flex";
+                        item.classList.remove('hidden');
 
                     } else {
 
-                        item.style.display = "none";
+                        item.classList.add('hidden');
 
                     }
 
                 });
-
-            });
-
-        });
-
-
-
-        const viewToggle = document.getElementById('view-toggle');
-
-        viewToggle.addEventListener('click', function() {
-
-            this.classList.toggle('on');
-
-            workGrid.classList.toggle('mode-preview');
-
-        });
-
-
-
-        workItems.forEach(item => {
-
-            item.addEventListener('touchstart', function() {
-
-                this.classList.add('is-active');
-
-            }, {passive: true});
-
-
-
-            item.addEventListener('touchend', function() {
-
-                setTimeout(() => { this.classList.remove('is-active'); }, 300);
-
-            });
-
-
-
-            item.addEventListener('touchcancel', function() {
-
-                this.classList.remove('is-active');
 
             });
 
@@ -565,6 +425,3 @@
 </body>
 
 </html>
-
-
-
