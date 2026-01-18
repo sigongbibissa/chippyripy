@@ -15,18 +15,12 @@
             background-color: #ffffff;
             font-family: 'Garamond', serif;
             overflow-y: auto; overflow-x: hidden;
-            
-            /* [수정] 텍스트 선택 및 시스템 메뉴 방지 */
-            -webkit-user-select: none; 
-            user-select: none;
-            -webkit-touch-callout: none; /* iOS 사파리 메뉴 방지 */
+            -webkit-user-select: none; user-select: none;
+            /* 모바일에서 길게 누를 때 시스템 메뉴가 뜨는 것을 방지 */
+            -webkit-touch-callout: none;
         }
 
-        img { 
-            -webkit-user-drag: none; 
-            user-drag: none; 
-            pointer-events: none; 
-        }
+        img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
 
         /* --- 로고 및 로딩 --- */
         .logo-container {
@@ -83,13 +77,8 @@
         .work-item { 
             display: flex; flex-direction: column; position: relative; cursor: pointer;
             transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
-            /* [추가] 모바일에서 탭했을 때 하이라이트 투명하게 */
-            -webkit-tap-highlight-color: transparent;
         }
-        .work-item a { 
-            text-decoration: none; color: inherit; display: contents; 
-            -webkit-touch-callout: none; /* 링크 길게 누르기 방지 */
-        }
+        .work-item a { text-decoration: none; color: inherit; display: contents; }
 
         .work-item.hidden {
             opacity: 0; visibility: hidden;
@@ -106,14 +95,14 @@
         
         .img-box img { 
             width: 100%; height: 100%; object-fit: cover; display: block; 
-            transition: opacity 0.4s ease;
+            transition: opacity 0.5s ease;
         }
 
         .img-box img.hover-img {
             position: absolute; top: 0; left: 0; opacity: 0;
         }
 
-        /* 호버 및 모바일 활성화 상태 */
+        /* [수정] PC 호버 및 모바일 활성화(.is-active) 상태 공통 적용 */
         .work-item:hover .img-box img.main-img,
         .work-item.is-active .img-box img.main-img { opacity: 0; }
 
@@ -125,9 +114,10 @@
             font-weight: normal; font-size: 0.55rem; letter-spacing: 0.2em; 
             color: #1a1a1a; margin: 0; text-align: center;
             opacity: 1; 
+            transform: translateY(0);
         }
 
-        /* --- 그리드 배치 생략 (기존과 동일) --- */
+        /* --- 배치 설정 --- */
         .item-1 { grid-column: 3 / 7; margin-top: 40px; } .item-1 .img-box { aspect-ratio: 16 / 10; }
         .item-2 { grid-column: 9 / 12; margin-top: 70px; } .item-2 .img-box { aspect-ratio: 1 / 1; }
         .item-3 { grid-column: 2 / 6; margin-top: -90px; } .item-3 .img-box { aspect-ratio: 1 / 1; }
@@ -160,28 +150,28 @@
         <section class="work-item item-1" data-category="architecture">
             <a href="project01.html">
                 <div class="img-box">
-                    <img src="main.jpg" class="main-img">
-                    <img src="main_hover.jpg" class="hover-img">
+                    <img src="main.jpg" class="main-img" alt="Arco Art Library">
+                    <img src="main_hover.jpg" class="hover-img" alt="Hover Image">
                 </div>
                 <h2>Arco Art Library-Architectural Renovation</h2>
             </a>
         </section>
-        
+
         <section class="work-item item-2" data-category="furniture">
             <a href="project02.html">
                 <div class="img-box">
-                    <img src="LZ_main.jpg" class="main-img">
-                    <img src="LZ_hover.jpg" class="hover-img">
+                    <img src="LZ_main.jpg" class="main-img" alt="On the ceiling">
+                    <img src="LZ_hover.jpg" class="hover-img" alt="Hover Image">
                 </div>
                 <h2>On the ceiling</h2>
             </a>
         </section>
-        
+
         <section class="work-item item-3" data-category="jewelry">
             <a href="project03.html">
                 <div class="img-box">
-                    <img src="or_main.jpg" class="main-img">
-                    <img src="or_hover.jpg" class="hover-img">
+                    <img src="or_main.jpg" class="main-img" alt="Ornament is sublime">
+                    <img src="or_hover.jpg" class="hover-img" alt="Hover Image">
                 </div>
                 <h2>Ornament is sublime</h2>
             </a>
@@ -190,8 +180,8 @@
         <section class="work-item item-4" data-category="architecture">
             <a href="project04.html">
                 <div class="img-box">
-                    <img src="발명제안서 렌더 바탕 50투명도.png" class="main-img">
-                    <img src="project04_hover.png" class="hover-img">
+                    <img src="발명제안서 렌더 바탕 50투명도.png" class="main-img" alt="Sliding Library">
+                    <img src="project04_hover.png" class="hover-img" alt="Hover Image">
                 </div>
                 <h2>Sliding Library</h2>
             </a>
@@ -200,8 +190,8 @@
         <section class="work-item item-5" data-category="architecture">
             <a href="project05.html">
                 <div class="img-box">
-                    <img src="mainshot.jpg" class="main-img">
-                    <img src="mainshot_hover.jpg" class="hover-img">
+                    <img src="mainshot.jpg" class="main-img" alt="Suwon crafting village">
+                    <img src="mainshot_hover.jpg" class="hover-img" alt="Hover Image">
                 </div>
                 <h2>Suwon crafting village</h2>
             </a>
@@ -210,8 +200,8 @@
         <section class="work-item item-6" data-category="furniture">
             <a href="project06.html">
                 <div class="img-box">
-                    <img src="desk_main.jpg" class="main-img">
-                    <img src="desk_hover.jpg" class="hover-img">
+                    <img src="desk_main.jpg" class="main-img" alt="Minimalist Desk">
+                    <img src="desk_hover.jpg" class="hover-img" alt="Hover Image">
                 </div>
                 <h2>06. MINIMALIST DESK</h2>
             </a>
@@ -219,13 +209,14 @@
     </div>
 
     <script>
+        // 로딩 제어
         window.addEventListener('load', function() {
             setTimeout(() => {
                 document.body.classList.replace('is-loading', 'is-complete');
             }, 1500);
         });
 
-        // 필터 로직
+        // 필터링 로직
         const filterBtns = document.querySelectorAll('.filter-btn');
         const workItems = document.querySelectorAll('.work-item');
 
@@ -234,6 +225,7 @@
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 const filterValue = btn.getAttribute('data-filter').toLowerCase();
+
                 workItems.forEach(item => {
                     const category = item.getAttribute('data-category').toLowerCase();
                     if (filterValue === 'all' || filterValue === category) {
@@ -245,21 +237,14 @@
             });
         });
 
-        // [수정] 모바일 꾹 누르기(시스템 메뉴) 방지 및 터치 효과
+        // [수정] 모바일 터치(누르고 있기) 대응 로직
         workItems.forEach(item => {
-            // 1. 우클릭/길게 누르기 메뉴 방지 (가장 중요)
-            item.addEventListener('contextmenu', function(e) {
-                e.preventDefault();
-                return false;
-            });
-
-            // 2. 터치 시작: 이미지 교체 클래스 추가
-            item.addEventListener('touchstart', function(e) {
-                // 스크롤 방해하지 않기 위해 기본 동작은 막지 않음
+            // 손가락을 대는 순간 이미지 바뀜
+            item.addEventListener('touchstart', function() {
                 this.classList.add('is-active');
             }, {passive: true});
 
-            // 3. 터치 종료: 이미지 원래대로
+            // 손가락을 떼거나 화면 밖으로 나가면 다시 원래대로
             item.addEventListener('touchend', function() {
                 this.classList.remove('is-active');
             });
