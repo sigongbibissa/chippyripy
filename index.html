@@ -38,7 +38,7 @@
         /* --- 저작권 문구 --- */
         .copyright {
             position: absolute; top: 20px; right: 40px; z-index: 1000;
-            font-size: 0.75rem; color: #999; letter-spacing: 0.05em;
+            font-size: 0.7rem; color: #999; letter-spacing: 0.05em;
             opacity: 0;
             animation: itemAppear 0.8s ease forwards 1.2s;
             transition: transform 0.3s ease-out, opacity 0.3s ease;
@@ -53,14 +53,14 @@
             animation: itemAppear 0.8s ease forwards;
             letter-spacing: -0.02em;
         }
-        .menu-item.works { left: 35%; top: 45%; animation-delay: 0.2s; }
+        .menu-item.projects { left: 35%; top: 45%; animation-delay: 0.2s; }
         .menu-item.shop { right: 30%; top: 25%; animation-delay: 0.4s; }
         .menu-item.about { right: 25%; bottom: 20%; animation-delay: 0.6s; }
 
         /* --- 현실도피하기 버튼 --- */
         .minigame-btn {
             position: absolute; bottom: 40px; left: 40px; z-index: 1000;
-            text-decoration: none; color: #000; font-size: 1.1rem;
+            text-decoration: none; color: #000; font-size: 0.8rem;
             font-weight: 500; font-style: italic; opacity: 0;
             transition: all 0.3s ease;
             animation: itemAppear 0.8s ease forwards 1s;
@@ -88,7 +88,7 @@
             }
 
             .page-wrapper:has(.menu-item:hover) .menu-item.shop:not(:hover) { transform: translateX(-80px); }
-            .page-wrapper:has(.menu-item:hover) .menu-item.works:not(:hover) { transform: translate(80px, -80px); }
+            .page-wrapper:has(.menu-item:hover) .menu-item.projects:not(:hover) { transform: translate(80px, -80px); }
             .page-wrapper:has(.menu-item:hover) .menu-item.about:not(:hover) { transform: translate(80px, 80px); }
 
             .menu-item:hover { 
@@ -133,7 +133,7 @@
 
         <nav class="main-menu">
             <a href="shop.html" class="menu-item shop">Shop</a>
-            <a href="works.html" class="menu-item works">works</a>
+            <a href="projects.html" class="menu-item projects">projects</a>
             <a href="about.html" class="menu-item about">About</a>
         </nav>
 
@@ -176,3 +176,4 @@
     </script>
 </body>
 </html>
+
