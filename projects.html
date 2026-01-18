@@ -13,7 +13,6 @@
         :root {
             --reveal-speed: 1s;
             --page-transition: 0.8s;
-            /* 전역 서체 설정 */
             --main-font: 'EB Garamond', serif;
         }
 
@@ -24,7 +23,6 @@
             font-family: var(--main-font);
             overflow-y: auto; overflow-x: hidden;
             -webkit-user-select: none; user-select: none;
-            /* 모바일 텍스트 크기 보정 */
             -webkit-text-size-adjust: 100%;
         }
 
@@ -123,29 +121,34 @@
         .item-5 { grid-column: 3 / 9; margin-top: -30px; } .item-5 .img-box { aspect-ratio: 4 / 1.8; }
         .item-6 { grid-column: 7 / 12; margin-top: 40px; } .item-6 .img-box { aspect-ratio: 4 / 3; }
 
-        /* --- 📱 모바일 최적화 레이아웃 (768px 미만) --- */
+        /* --- 📱 모바일 최적화 레이아웃 (768px 미만) - 비대칭 유지 버전 --- */
         @media (max-width: 768px) {
             .logo-container { top: 25px; left: 25px; }
             .main-logo { width: 40px; }
 
             .filter-container { 
-                top: 30px; right: 20px; gap: 12px; 
-                flex-wrap: wrap; justify-content: flex-end; width: 60%;
+                top: 30px; right: 20px; gap: 10px; 
+                flex-wrap: wrap; justify-content: flex-end; width: 65%;
             }
             .filter-btn { font-size: 0.55rem; }
 
             .work-container {
-                padding: 140px 20px 60px;
-                display: flex; flex-direction: column; /* 세로 일렬 배치 */
-                gap: 50px;
+                padding: 140px 15px 60px;
+                display: grid; /* Flex 대신 Grid 유지 */
+                grid-template-columns: repeat(12, 1fr);
+                gap: 80px 15px; /* 세로 간격 조정 */
             }
 
-            .work-item {
-                width: 100% !important; margin: 0 !important;
-            }
+            /* 모바일 전용 비대칭 배치 재설정 */
+            .item-1 { grid-column: 1 / 9; margin-top: 20px; }
+            .item-2 { grid-column: 6 / 13; margin-top: 40px; }
+            .item-3 { grid-column: 2 / 8; margin-top: -20px; }
+            .item-4 { grid-column: 7 / 12; margin-top: 0px; }
+            .item-5 { grid-column: 1 / 11; margin-top: 20px; }
+            .item-6 { grid-column: 4 / 13; margin-top: 30px; }
 
             .work-item h2 {
-                font-size: 0.8rem;
+                font-size: 0.7rem;
                 margin-top: 8px;
                 letter-spacing: 0.05em;
             }
@@ -168,7 +171,7 @@
         <button class="filter-btn" data-filter="architecture">ARCHITECTURE</button>
         <button class="filter-btn" data-filter="jewelry">JEWELRY</button>
         <button class="filter-btn" data-filter="furniture">FURNITURE</button>
-        <button class="filter-btn" data-filter="ETC">ETC</button>
+        <button class="filter-btn" data-filter="etc">ETC</button>
     </div>
 
     <div class="logo-container">
@@ -233,7 +236,6 @@
 
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
-                // 활성 버튼 스타일 변경
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
 
@@ -243,11 +245,9 @@
                     const category = item.getAttribute('data-category').toLowerCase();
                     if (filterValue === 'all' || filterValue === category) {
                         item.classList.remove('hidden');
-                        // 필터링 후 레이아웃 깨짐 방지를 위해 위치 재조정 효과
                         item.style.position = 'relative'; 
                     } else {
                         item.classList.add('hidden');
-                        // 숨겨진 아이템은 공간을 차지하지 않도록 설정
                         setTimeout(() => {
                             if(item.classList.contains('hidden')) {
                                 item.style.position = 'absolute';
@@ -260,5 +260,3 @@
     </script>
 </body>
 </html>
-
-
