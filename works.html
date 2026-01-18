@@ -10,7 +10,6 @@
             --reveal-speed: 1s;
             --page-transition: 0.8s;
             --accent-color: #1a1a1a;
-            /* 폰트 변수 설정 */
             --main-font: 'EB Garamond', serif;
         }
 
@@ -18,16 +17,27 @@
             margin: 0; padding: 0;
             width: 100%; height: 100%;
             background-color: #ffffff;
-            /* 폰트 적용 */
             font-family: var(--main-font);
             overflow-y: auto; overflow-x: hidden;
             -webkit-user-select: none; user-select: none;
             -webkit-touch-callout: none;
+            color: var(--accent-color); /* 기본 텍스트 색상 검은색으로 설정 */
+        }
+
+        /* --- 링크 스타일 리셋 (파란색 및 밑줄 제거) --- */
+        a {
+            text-decoration: none; /* 밑줄 제거 */
+            color: inherit; /* 부모 요소의 색상(검은색) 상속 */
+            outline: none; /* 클릭 시 외곽선 제거 */
+        }
+        a:link, a:visited, a:hover, a:active {
+            color: inherit; /* 모든 상태에서 색상 유지 */
+            text-decoration: none; /* 모든 상태에서 밑줄 제거 */
         }
 
         img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
 
-        /* --- 상단 내비게이션 구조 --- */
+        /* --- 상단 내비게이션 (2단 구조) --- */
         .header-nav {
             position: fixed;
             top: 40px;
@@ -42,7 +52,7 @@
         }
         .is-complete .header-nav { opacity: 1; }
 
-        /* 로고와 메뉴 라인 */
+        /* 1단: 로고와 필터 메뉴 */
         .nav-top-row {
             width: 100%;
             display: flex;
@@ -52,9 +62,9 @@
             box-sizing: border-box;
         }
 
-        /* 스위치 라인 (한 칸 아래로 내림) */
+        /* 2단: 스위치 영역 (한 칸 아래로 배치) */
         .nav-bottom-row {
-            margin-top: 45px; /* 메뉴 라인과의 간격을 확실히 벌림 */
+            margin-top: 40px;
             display: flex;
             justify-content: center;
         }
@@ -65,14 +75,14 @@
         .filter-btn {
             background: none; border: none;
             font-family: var(--main-font); 
-            font-size: 0.75rem; /* 가독성을 위해 살짝 키움 */
+            font-size: 0.7rem; 
             letter-spacing: 0.15em; color: var(--accent-color);
             cursor: pointer; padding: 0; opacity: 0.4;
             transition: opacity 0.3s ease;
         }
         .filter-btn.active, .filter-btn:hover { opacity: 1; }
 
-        /* --- 스위치 그래픽 디자인 --- */
+        /* --- 요청하신 회색 버튼 스타일 + 상하 배치 --- */
         .view-switch-wrapper {
             display: flex; 
             flex-direction: column; 
@@ -81,55 +91,41 @@
             cursor: pointer;
         }
         .switch-label {
-            font-size: 0.8rem; /* Garamond 폰트 체감 크기 조정 */
+            font-size: 0.75rem; 
             letter-spacing: 0.05em; 
             color: var(--accent-color);
             font-family: var(--main-font);
-            font-weight: 500;
+            opacity: 0.6;
+            transition: opacity 0.3s;
         }
         .switch-track {
-            width: 38px; 
-            height: 19px; 
-            background-color: #fff; 
-            border: 1.5px solid #000; /* 손그림 느낌의 검은색 테두리 */
-            border-radius: 20px; 
+            width: 32px; 
+            height: 16px; 
+            background-color: #eee;
+            border-radius: 15px; 
             position: relative; 
-            transition: all 0.3s;
+            transition: background-color 0.3s;
         }
         .switch-thumb {
-            width: 13px; 
-            height: 13px; 
-            background-color: #000; /* 검은색 원형 버튼 */
+            width: 12px; 
+            height: 12px; 
+            background-color: #fff;
             border-radius: 50%; 
             position: absolute; 
-            top: 3px; 
-            left: 3px;
+            top: 2px; 
+            left: 2px;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-        /* 스위치 On 상태 애니메이션 */
-        .view-switch-wrapper.on .switch-thumb { transform: translateX(19px); }
+        
+        .view-switch-wrapper.on .switch-track { background-color: var(--accent-color); }
+        .view-switch-wrapper.on .switch-thumb { transform: translateX(16px); }
+        .view-switch-wrapper.on .switch-label { opacity: 1; font-weight: bold; }
 
-        /* --- 로딩 애니메이션 --- */
-        .loading-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-            z-index: 2000; background-color: #ffffff;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
-        }
-        .loading-wrap { display: flex; gap: 0; align-items: center; }
-        .loading-wrap img { width: 150px; height: auto; margin: 0 -40px; opacity: 0; }
-        .is-loading .loading-wrap img { animation: wave 1.2s infinite ease-in-out; }
-        @keyframes wave { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
-        .is-loading .loading-wrap img:nth-child(1) { animation-delay: 0.0s; }
-        .is-loading .loading-wrap img:nth-child(2) { animation-delay: 0.3s; }
-        .is-loading .loading-wrap img:nth-child(3) { animation-delay: 0.6s; }
-        .is-loading .loading-wrap img:nth-child(4) { animation-delay: 0.9s; }
-        .is-complete .loading-overlay { opacity: 0; visibility: hidden; }
-
-        /* --- 워크 컨테이너 상단 여백 --- */
+        /* --- 워크 컨테이너 여백 --- */
         .work-container {
             width: 100%; max-width: 1400px; margin: 0 auto;
-            padding: 260px 40px 100px; /* 헤더 2단 배치에 맞춰 여백 증가 */
+            padding: 260px 40px 100px;
             box-sizing: border-box;
             display: grid; grid-template-columns: repeat(12, 1fr);
             gap: 160px 40px; opacity: 0; transform: translateY(30px);
@@ -140,18 +136,19 @@
         .work-item h2 { 
             font-family: var(--main-font);
             font-weight: normal; font-size: 0.65rem; letter-spacing: 0.2em; 
-            color: #1a1a1a; margin: 0; text-align: center;
+            color: var(--accent-color); /* 명시적으로 검은색 설정 */
+            margin: 0; text-align: center;
         }
 
-        /* (기타 워크 아이템 스타일 유지) */
-        .work-item { display: flex; flex-direction: column; position: relative; cursor: pointer; transition: opacity 0.5s, transform 0.5s; }
+        /* 이미지 관련 스타일 */
+        .work-item { display: flex; flex-direction: column; position: relative; cursor: pointer; }
         .img-box { width: 100%; background-color: #fcfcfc; margin-bottom: 15px; overflow: hidden; position: relative; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 0.6s ease; }
         .img-box img.hover-img { position: absolute; top: 0; left: 0; opacity: 0; }
         .work-item:hover .img-box img.main-img, .work-container.mode-preview .main-img { opacity: 0; }
         .work-item:hover .img-box img.hover-img, .work-container.mode-preview .hover-img { opacity: 1; }
 
-        /* 그리드 배치 설정 */
+        /* 그리드 배치 */
         .item-1 { grid-column: 3 / 7; margin-top: 40px; } .item-1 .img-box { aspect-ratio: 16 / 10; }
         .item-2 { grid-column: 9 / 12; margin-top: 70px; } .item-2 .img-box { aspect-ratio: 1 / 1; }
         .item-3 { grid-column: 2 / 6; margin-top: -90px; } .item-3 .img-box { aspect-ratio: 1 / 1; }
@@ -159,11 +156,22 @@
         .item-5 { grid-column: 3 / 9; margin-top: -30px; } .item-5 .img-box { aspect-ratio: 4 / 1.8; }
         .item-6 { grid-column: 7 / 12; margin-top: 40px; } .item-6 .img-box { aspect-ratio: 4 / 3; }
 
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 2000; background-color: #ffffff; transition: opacity 0.5s ease, visibility 0.5s ease; }
+        .loading-wrap { display: flex; gap: 0; align-items: center; }
+        .loading-wrap img { width: 150px; height: auto; margin: 0 -40px; opacity: 0; }
+        .is-loading .loading-wrap img { animation: wave 1.2s infinite ease-in-out; }
+        @keyframes wave { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+        .is-loading .loading-wrap img:nth-child(1) { animation-delay: 0.0s; }
+        .is-loading .loading-wrap img:nth-child(2) { animation-delay: 0.3s; }
+        .is-loading .loading-wrap img:nth-child(3) { animation-delay: 0.6s; }
+        .is-loading .loading-wrap img:nth-child(4) { animation-delay: 0.9s; }
+        .is-complete .loading-overlay { opacity: 0; visibility: hidden; }
+
         @media (max-width: 768px) {
             .header-nav { top: 20px; }
             .nav-top-row { padding: 0 20px; }
-            .nav-bottom-row { margin-top: 30px; }
-            .work-container { padding-top: 220px; gap: 80px 20px; }
+            .nav-bottom-row { margin-top: 25px; }
+            .work-container { padding-top: 200px; gap: 80px 20px; }
         }
     </style>
 </head>
@@ -171,8 +179,7 @@
 
     <div class="loading-overlay">
         <div class="loading-wrap">
-            <img src="loading1.png" alt="L1"><img src="loading2.png" alt="L2">
-            <img src="loading3.png" alt="L3"><img src="loading4.png" alt="L4">
+            <img src="loading1.png" alt="L1"><img src="loading2.png" alt="L2"><img src="loading3.png" alt="L3"><img src="loading4.png" alt="L4">
         </div>
     </div>
 
@@ -204,69 +211,47 @@
     <div class="work-container" id="work-grid">
         <section class="work-item item-1" data-category="architecture">
             <a href="project01.html">
-                <div class="img-box">
-                    <img src="main.jpg" class="main-img" alt="Arco Art Library">
-                    <img src="main_hover.jpg" class="hover-img" alt="Hover Image">
-                </div>
+                <div class="img-box"><img src="main.jpg" class="main-img"><img src="main_hover.jpg" class="hover-img"></div>
                 <h2>Arco Art Library-Architectural Renovation</h2>
             </a>
         </section>
         <section class="work-item item-2" data-category="furniture">
             <a href="project02.html">
-                <div class="img-box">
-                    <img src="LZ_main.jpg" class="main-img" alt="On the ceiling">
-                    <img src="LZ_hover.jpg" class="hover-img" alt="Hover Image">
-                </div>
+                <div class="img-box"><img src="LZ_main.jpg" class="main-img"><img src="LZ_hover.jpg" class="hover-img"></div>
                 <h2>On the ceiling</h2>
             </a>
         </section>
         <section class="work-item item-3" data-category="jewelry">
             <a href="project03.html">
-                <div class="img-box">
-                    <img src="or_main.jpg" class="main-img" alt="Ornament is sublime">
-                    <img src="or_hover.jpg" class="hover-img" alt="Hover Image">
-                </div>
+                <div class="img-box"><img src="or_main.jpg" class="main-img"><img src="or_hover.jpg" class="hover-img"></div>
                 <h2>Ornament is sublime</h2>
             </a>
         </section>
         <section class="work-item item-4" data-category="architecture">
             <a href="project04.html">
-                <div class="img-box">
-                    <img src="발명제안서 렌더 바탕 50투명도.png" class="main-img" alt="Sliding Library">
-                    <img src="project04_hover.png" class="hover-img" alt="Hover Image">
-                </div>
+                <div class="img-box"><img src="발명제안서 렌더 바탕 50투명도.png" class="main-img"><img src="project04_hover.png" class="hover-img"></div>
                 <h2>Sliding Library</h2>
             </a>
         </section>
         <section class="work-item item-5" data-category="architecture">
             <a href="project05.html">
-                <div class="img-box">
-                    <img src="mainshot.jpg" class="main-img" alt="Suwon crafting village">
-                    <img src="mainshot_hover.jpg" class="hover-img" alt="Hover Image">
-                </div>
+                <div class="img-box"><img src="mainshot.jpg" class="main-img"><img src="mainshot_hover.jpg" class="hover-img"></div>
                 <h2>Suwon crafting village</h2>
             </a>
         </section>
         <section class="work-item item-6" data-category="furniture">
             <a href="project06.html">
-                <div class="img-box">
-                    <img src="desk_main.jpg" class="main-img" alt="Minimalist Desk">
-                    <img src="desk_hover.jpg" class="hover-img" alt="Hover Image">
-                </div>
+                <div class="img-box"><img src="desk_main.jpg" class="main-img"><img src="desk_hover.jpg" class="hover-img"></div>
                 <h2>06. MINIMALIST DESK</h2>
             </a>
         </section>
     </div>
 
     <script>
-        // 로딩 제어
         window.addEventListener('load', function() {
-            setTimeout(() => {
-                document.body.classList.replace('is-loading', 'is-complete');
-            }, 1200);
+            setTimeout(() => { document.body.classList.replace('is-loading', 'is-complete'); }, 1200);
         });
 
-        // 필터링
         const filterBtns = document.querySelectorAll('.filter-btn');
         const workItems = document.querySelectorAll('.work-item');
         const workGrid = document.getElementById('work-grid');
@@ -279,17 +264,16 @@
                 workItems.forEach(item => {
                     const category = item.getAttribute('data-category').toLowerCase();
                     if (filterValue === 'all' || filterValue === category) {
+                        item.classList.remove('hidden');
                         item.style.display = "flex";
-                        setTimeout(() => item.classList.remove('hidden'), 10);
                     } else {
                         item.classList.add('hidden');
-                        setTimeout(() => item.style.display = "none", 500);
+                        item.style.display = "none";
                     }
                 });
             });
         });
 
-        // 스위치 로직
         const viewToggle = document.getElementById('view-toggle');
         viewToggle.addEventListener('click', function() {
             this.classList.toggle('on');
