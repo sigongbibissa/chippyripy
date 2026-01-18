@@ -27,7 +27,7 @@
             position: fixed; top: 40px; left: 40px; z-index: 1000;
             opacity: 0; transition: opacity 0.6s ease;
         }
-        .main-logo { width: 50px; height: auto; cursor: pointer; pointer-events: auto !important; }
+        .main-logo { width: 45px; height: auto; cursor: pointer; pointer-events: auto !important; }
 
         .loading-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -46,11 +46,19 @@
         .is-complete .loading-overlay { opacity: 0; visibility: hidden; }
         .is-complete .logo-container { opacity: 1; }
 
-        /* --- 필터/소팅 및 스위치 UI --- */
+        /* --- [수정] 헤더 컨트롤 중앙 배치 --- */
         .header-controls {
-            position: fixed; top: 45px; right: 40px; z-index: 1000;
-            display: flex; align-items: center; gap: 25px; opacity: 0;
-            transition: opacity 0.6s ease 0.5s;
+            position: fixed; 
+            top: 45px; 
+            left: 50%; 
+            transform: translateX(-50%); /* 정확한 중앙 정렬 */
+            z-index: 1000;
+            display: flex; 
+            align-items: center; 
+            gap: 30px; 
+            opacity: 0;
+            transition: opacity 0.6s ease 0.5s, transform 0.6s ease 0.5s;
+            white-space: nowrap;
         }
         .is-complete .header-controls { opacity: 1; }
 
@@ -64,7 +72,7 @@
         }
         .filter-btn.active, .filter-btn:hover { opacity: 1; }
 
-        /* --- 통합 스위치 스타일 --- */
+        /* --- 스위치 스타일 --- */
         .switch-separator { width: 1px; height: 12px; background-color: #eee; }
         
         .view-switch-wrapper {
@@ -84,7 +92,6 @@
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-        /* 스위치 On 상태 */
         .view-switch-wrapper.on .switch-track { background-color: var(--accent-color); }
         .view-switch-wrapper.on .switch-thumb { transform: translateX(15px); }
         .view-switch-wrapper.on .switch-label { opacity: 1; font-weight: bold; }
@@ -121,7 +128,7 @@
         }
         .img-box img.hover-img { position: absolute; top: 0; left: 0; opacity: 0; }
 
-        /* --- 이미지 전환 로직 (PC 호버 / 모바일 활성 / 스위치 전체적용) --- */
+        /* 이미지 전환 로직 */
         .work-item:hover .img-box img.main-img,
         .work-item.is-active .img-box img.main-img,
         .work-container.mode-preview .main-img { opacity: 0; }
@@ -135,13 +142,25 @@
             color: #1a1a1a; margin: 0; text-align: center;
         }
 
-        /* --- 배치 설정 --- */
+        /* 배치 설정 (그리드 레이아웃 유지) */
         .item-1 { grid-column: 3 / 7; margin-top: 40px; } .item-1 .img-box { aspect-ratio: 16 / 10; }
         .item-2 { grid-column: 9 / 12; margin-top: 70px; } .item-2 .img-box { aspect-ratio: 1 / 1; }
         .item-3 { grid-column: 2 / 6; margin-top: -90px; } .item-3 .img-box { aspect-ratio: 1 / 1; }
         .item-4 { grid-column: 8 / 11; margin-top: -30px; } .item-4 .img-box { aspect-ratio: 2 / 3; }
         .item-5 { grid-column: 3 / 9; margin-top: -30px; } .item-5 .img-box { aspect-ratio: 4 / 1.8; }
         .item-6 { grid-column: 7 / 12; margin-top: 40px; } .item-6 .img-box { aspect-ratio: 4 / 3; }
+
+        /* 모바일 대응 (중앙 정렬 유지) */
+        @media (max-width: 768px) {
+            .header-controls { 
+                top: auto; bottom: 40px; /* 모바일에서는 하단 중앙이 조작하기 더 편함 */
+                flex-direction: column; gap: 15px; 
+                background: rgba(255,255,255,0.9); padding: 15px 25px;
+                border-radius: 30px; backdrop-filter: blur(5px);
+                box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            }
+            .switch-separator { display: none; }
+        }
     </style>
 </head>
 <body class="is-loading" oncontextmenu="return false">
@@ -238,14 +257,14 @@
     </div>
 
     <script>
-        // 1. 로딩 제어
+        // 로딩 제어
         window.addEventListener('load', function() {
             setTimeout(() => {
                 document.body.classList.replace('is-loading', 'is-complete');
             }, 1500);
         });
 
-        // 2. 필터링 로직
+        // 필터링
         const filterBtns = document.querySelectorAll('.filter-btn');
         const workItems = document.querySelectorAll('.work-item');
         const workGrid = document.getElementById('work-grid');
@@ -267,23 +286,21 @@
             });
         });
 
-        // 3. 통합 이미지 전환 스위치 로직
+        // 스위치 토글
         const viewToggle = document.getElementById('view-toggle');
         viewToggle.addEventListener('click', function() {
             this.classList.toggle('on');
             workGrid.classList.toggle('mode-preview');
         });
 
-        // 4. 모바일 터치 대응
+        // 모바일 터치
         workItems.forEach(item => {
             item.addEventListener('touchstart', function() {
                 this.classList.add('is-active');
             }, {passive: true});
-
             item.addEventListener('touchend', function() {
                 this.classList.remove('is-active');
             });
-
             item.addEventListener('touchcancel', function() {
                 this.classList.remove('is-active');
             });
