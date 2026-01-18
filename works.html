@@ -7,6 +7,7 @@
         :root {
             --reveal-speed: 1s;
             --page-transition: 0.8s;
+            --accent-color: #1a1a1a;
         }
 
         body, html {
@@ -16,7 +17,6 @@
             font-family: 'Garamond', serif;
             overflow-y: auto; overflow-x: hidden;
             -webkit-user-select: none; user-select: none;
-            /* 모바일에서 길게 누를 때 시스템 메뉴가 뜨는 것을 방지 */
             -webkit-touch-callout: none;
         }
 
@@ -46,22 +46,48 @@
         .is-complete .loading-overlay { opacity: 0; visibility: hidden; }
         .is-complete .logo-container { opacity: 1; }
 
-        /* --- 필터/소팅 UI --- */
-        .filter-container {
+        /* --- 필터/소팅 및 스위치 UI --- */
+        .header-controls {
             position: fixed; top: 45px; right: 40px; z-index: 1000;
-            display: flex; gap: 20px; opacity: 0;
+            display: flex; align-items: center; gap: 25px; opacity: 0;
             transition: opacity 0.6s ease 0.5s;
         }
-        .is-complete .filter-container { opacity: 1; }
+        .is-complete .header-controls { opacity: 1; }
 
+        .filter-container { display: flex; gap: 20px; }
         .filter-btn {
             background: none; border: none;
             font-family: 'Garamond', serif; font-size: 0.65rem;
-            letter-spacing: 0.15em; color: #1a1a1a;
+            letter-spacing: 0.15em; color: var(--accent-color);
             cursor: pointer; padding: 0; opacity: 0.4;
             transition: opacity 0.3s ease;
         }
         .filter-btn.active, .filter-btn:hover { opacity: 1; }
+
+        /* --- 통합 스위치 스타일 --- */
+        .switch-separator { width: 1px; height: 12px; background-color: #eee; }
+        
+        .view-switch-wrapper {
+            display: flex; align-items: center; gap: 10px; cursor: pointer;
+        }
+        .switch-label {
+            font-size: 0.6rem; letter-spacing: 0.1em; color: var(--accent-color);
+            opacity: 0.5; transition: opacity 0.3s;
+        }
+        .switch-track {
+            width: 30px; height: 15px; background-color: #eee;
+            border-radius: 15px; position: relative; transition: background-color 0.3s;
+        }
+        .switch-thumb {
+            width: 11px; height: 11px; background-color: #fff;
+            border-radius: 50%; position: absolute; top: 2px; left: 2px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        /* 스위치 On 상태 */
+        .view-switch-wrapper.on .switch-track { background-color: var(--accent-color); }
+        .view-switch-wrapper.on .switch-thumb { transform: translateX(15px); }
+        .view-switch-wrapper.on .switch-label { opacity: 1; font-weight: bold; }
 
         /* --- 워크 컨테이너 --- */
         .work-container {
@@ -73,48 +99,40 @@
         }
         .is-complete .work-container { opacity: 1; visibility: visible; transform: translateY(0); }
 
-        /* --- 워크 아이템 공통 --- */
+        /* --- 워크 아이템 --- */
         .work-item { 
             display: flex; flex-direction: column; position: relative; cursor: pointer;
             transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
         }
         .work-item a { text-decoration: none; color: inherit; display: contents; }
-
         .work-item.hidden {
             opacity: 0; visibility: hidden;
             transform: translateY(20px) scale(0.95);
             pointer-events: none; position: absolute;
         }
 
-        /* --- 이미지 박스 및 호버 효과 --- */
         .img-box { 
-            width: 100%; background-color: #f0f0f0; margin-bottom: 15px; 
+            width: 100%; background-color: #fcfcfc; margin-bottom: 15px; 
             overflow: hidden; position: relative;
-            transition: transform 0.3s ease;
         }
-        
         .img-box img { 
             width: 100%; height: 100%; object-fit: cover; display: block; 
-            transition: opacity 0.5s ease;
+            transition: opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
+        .img-box img.hover-img { position: absolute; top: 0; left: 0; opacity: 0; }
 
-        .img-box img.hover-img {
-            position: absolute; top: 0; left: 0; opacity: 0;
-        }
-
-        /* [수정] PC 호버 및 모바일 활성화(.is-active) 상태 공통 적용 */
+        /* --- 이미지 전환 로직 (PC 호버 / 모바일 활성 / 스위치 전체적용) --- */
         .work-item:hover .img-box img.main-img,
-        .work-item.is-active .img-box img.main-img { opacity: 0; }
+        .work-item.is-active .img-box img.main-img,
+        .work-container.mode-preview .main-img { opacity: 0; }
 
         .work-item:hover .img-box img.hover-img,
-        .work-item.is-active .img-box img.hover-img { opacity: 1; }
+        .work-item.is-active .img-box img.hover-img,
+        .work-container.mode-preview .hover-img { opacity: 1; }
 
-        /* --- 제목 상시 노출 --- */
         .work-item h2 { 
             font-weight: normal; font-size: 0.55rem; letter-spacing: 0.2em; 
             color: #1a1a1a; margin: 0; text-align: center;
-            opacity: 1; 
-            transform: translateY(0);
         }
 
         /* --- 배치 설정 --- */
@@ -135,23 +153,34 @@
         </div>
     </div>
 
-    <div class="filter-container">
-        <button class="filter-btn active" data-filter="all">ALL</button>
-        <button class="filter-btn" data-filter="architecture">ARCHITECTURE</button>
-        <button class="filter-btn" data-filter="jewelry">JEWELRY</button>
-        <button class="filter-btn" data-filter="furniture">FURNITURE</button>
+    <div class="header-controls">
+        <div class="filter-container">
+            <button class="filter-btn active" data-filter="all">ALL</button>
+            <button class="filter-btn" data-filter="architecture">ARCHITECTURE</button>
+            <button class="filter-btn" data-filter="jewelry">JEWELRY</button>
+            <button class="filter-btn" data-filter="furniture">FURNITURE</button>
+        </div>
+        
+        <div class="switch-separator"></div>
+
+        <div class="view-switch-wrapper" id="view-toggle">
+            <span class="switch-label">PREVIEW</span>
+            <div class="switch-track">
+                <div class="switch-thumb"></div>
+            </div>
+        </div>
     </div>
 
     <div class="logo-container">
         <a href="index.html"><img src="logo.png" class="main-logo" alt="Logo"></a>
     </div>
 
-    <div class="work-container">
+    <div class="work-container" id="work-grid">
         <section class="work-item item-1" data-category="architecture">
             <a href="project01.html">
                 <div class="img-box">
                     <img src="main.jpg" class="main-img" alt="Arco Art Library">
-                    <img src="main.jpg" class="hover-img" alt="Hover Image">
+                    <img src="main_hover.jpg" class="hover-img" alt="Hover Image">
                 </div>
                 <h2>Arco Art Library-Architectural Renovation</h2>
             </a>
@@ -161,7 +190,7 @@
             <a href="project02.html">
                 <div class="img-box">
                     <img src="LZ_main.jpg" class="main-img" alt="On the ceiling">
-                    <img src="LZ_main.jpg" class="hover-img" alt="Hover Image">
+                    <img src="LZ_hover.jpg" class="hover-img" alt="Hover Image">
                 </div>
                 <h2>On the ceiling</h2>
             </a>
@@ -171,7 +200,7 @@
             <a href="project03.html">
                 <div class="img-box">
                     <img src="or_main.jpg" class="main-img" alt="Ornament is sublime">
-                    <img src="or_main.jpg" class="hover-img" alt="Hover Image">
+                    <img src="or_hover.jpg" class="hover-img" alt="Hover Image">
                 </div>
                 <h2>Ornament is sublime</h2>
             </a>
@@ -181,7 +210,7 @@
             <a href="project04.html">
                 <div class="img-box">
                     <img src="발명제안서 렌더 바탕 50투명도.png" class="main-img" alt="Sliding Library">
-                    <img src="발명제안서 렌더 바탕 50투명도.png" class="hover-img" alt="Hover Image">
+                    <img src="project04_hover.png" class="hover-img" alt="Hover Image">
                 </div>
                 <h2>Sliding Library</h2>
             </a>
@@ -191,7 +220,7 @@
             <a href="project05.html">
                 <div class="img-box">
                     <img src="mainshot.jpg" class="main-img" alt="Suwon crafting village">
-                    <img src="mainshot.jpg" class="hover-img" alt="Hover Image">
+                    <img src="mainshot_hover.jpg" class="hover-img" alt="Hover Image">
                 </div>
                 <h2>Suwon crafting village</h2>
             </a>
@@ -209,16 +238,17 @@
     </div>
 
     <script>
-        // 로딩 제어
+        // 1. 로딩 제어
         window.addEventListener('load', function() {
             setTimeout(() => {
                 document.body.classList.replace('is-loading', 'is-complete');
             }, 1500);
         });
 
-        // 필터링 로직
+        // 2. 필터링 로직
         const filterBtns = document.querySelectorAll('.filter-btn');
         const workItems = document.querySelectorAll('.work-item');
+        const workGrid = document.getElementById('work-grid');
 
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -237,14 +267,19 @@
             });
         });
 
-        // [수정] 모바일 터치(누르고 있기) 대응 로직
+        // 3. 통합 이미지 전환 스위치 로직
+        const viewToggle = document.getElementById('view-toggle');
+        viewToggle.addEventListener('click', function() {
+            this.classList.toggle('on');
+            workGrid.classList.toggle('mode-preview');
+        });
+
+        // 4. 모바일 터치 대응
         workItems.forEach(item => {
-            // 손가락을 대는 순간 이미지 바뀜
             item.addEventListener('touchstart', function() {
                 this.classList.add('is-active');
             }, {passive: true});
 
-            // 손가락을 떼거나 화면 밖으로 나가면 다시 원래대로
             item.addEventListener('touchend', function() {
                 this.classList.remove('is-active');
             });
@@ -256,4 +291,3 @@
     </script>
 </body>
 </html>
-
