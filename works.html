@@ -24,20 +24,16 @@
             color: var(--accent-color);
         }
 
-        /* --- 링크 스타일 리셋 (파란색 및 밑줄 제거) --- */
-        a {
-            text-decoration: none;
-            color: inherit;
+        /* --- 링크 스타일: 파란색 및 밑줄 완전 제거 --- */
+        a, a:link, a:visited, a:hover, a:active {
+            text-decoration: none !important; /* 밑줄 제거 */
+            color: #1a1a1a !important; /* 모든 상태에서 검은색 유지 */
             outline: none;
-        }
-        a:link, a:visited, a:hover, a:active {
-            color: inherit;
-            text-decoration: none;
         }
 
         img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
 
-        /* --- 고정된 상단 내비게이션 (로고 & 메뉴만) --- */
+        /* --- 상단 고정 헤더: 배경 제거 (뿌연 느낌 삭제) --- */
         .fixed-header {
             position: fixed;
             top: 40px;
@@ -51,11 +47,15 @@
             box-sizing: border-box;
             opacity: 0;
             transition: opacity 0.6s ease 0.5s;
-            background-color: rgba(255, 255, 255, 0.9); /* 스크롤 시 가독성을 위해 살짝 배경 추가 */
+            background-color: transparent; /* 배경을 투명하게 설정 */
+            pointer-events: none; /* 헤더 빈 영역이 클릭을 방해하지 않도록 설정 */
         }
         .is-complete .fixed-header { opacity: 1; }
 
-        .main-logo { width: 50px; height: auto; cursor: pointer; pointer-events: auto !important; }
+        /* 로고와 메뉴 버튼은 클릭 가능해야 함 */
+        .nav-left, .nav-right { pointer-events: auto; }
+
+        .main-logo { width: 50px; height: auto; cursor: pointer; }
 
         .filter-container { display: flex; gap: 20px; }
         .filter-btn {
@@ -68,10 +68,10 @@
         }
         .filter-btn.active, .filter-btn:hover { opacity: 1; }
 
-        /* --- 스크롤되는 스위치 영역 (본문에 포함) --- */
+        /* --- 스크롤되는 본문 영역 --- */
         .scroll-section {
             width: 100%;
-            padding-top: 150px; /* 고정 헤더와의 간격 */
+            padding-top: 150px; /* 상단 메뉴와의 기본 간격 */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -81,12 +81,12 @@
         .is-complete .scroll-section { opacity: 1; }
 
         .switch-container {
-            margin-bottom: 60px; /* 프로젝트 리스트와의 간격 */
+            margin-bottom: 60px;
             display: flex;
             justify-content: center;
         }
 
-        /* 회색 버튼 스타일 + 상하 배치 */
+        /* 회색 스위치 디자인 + 상하 배치 */
         .view-switch-wrapper {
             display: flex; 
             flex-direction: column; 
@@ -125,7 +125,7 @@
         .view-switch-wrapper.on .switch-thumb { transform: translateX(16px); }
         .view-switch-wrapper.on .switch-label { opacity: 1; font-weight: bold; }
 
-        /* --- 워크 컨테이너 (그리드) --- */
+        /* --- 워크 그리드 --- */
         .work-container {
             width: 100%; max-width: 1400px; margin: 0 auto;
             padding: 0 40px 100px;
@@ -137,7 +137,7 @@
         .work-item h2 { 
             font-family: var(--main-font);
             font-weight: normal; font-size: 0.65rem; letter-spacing: 0.2em; 
-            color: var(--accent-color);
+            color: #1a1a1a;
             margin: 0; text-align: center;
         }
 
@@ -163,10 +163,6 @@
         .loading-wrap img { width: 150px; height: auto; margin: 0 -40px; opacity: 0; }
         .is-loading .loading-wrap img { animation: wave 1.2s infinite ease-in-out; }
         @keyframes wave { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
-        .is-loading .loading-wrap img:nth-child(1) { animation-delay: 0.0s; }
-        .is-loading .loading-wrap img:nth-child(2) { animation-delay: 0.3s; }
-        .is-loading .loading-wrap img:nth-child(3) { animation-delay: 0.6s; }
-        .is-loading .loading-wrap img:nth-child(4) { animation-delay: 0.9s; }
         .is-complete .loading-overlay { opacity: 0; visibility: hidden; }
 
         @media (max-width: 768px) {
@@ -253,7 +249,7 @@
             setTimeout(() => { document.body.classList.replace('is-loading', 'is-complete'); }, 1200);
         });
 
-        // 필터링 기능
+        // 필터링
         const filterBtns = document.querySelectorAll('.filter-btn');
         const workItems = document.querySelectorAll('.work-item');
         const workGrid = document.getElementById('work-grid');
