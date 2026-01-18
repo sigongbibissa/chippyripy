@@ -22,7 +22,7 @@
 
         img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
 
-        /* --- 상단 내비게이션 구조 (수정됨) --- */
+        /* --- 상단 내비게이션 (중앙 정렬 유지) --- */
         .header-nav {
             position: fixed;
             top: 40px;
@@ -39,7 +39,6 @@
         }
         .is-complete .header-nav { opacity: 1; }
 
-        /* 좌, 중, 우 영역을 균등하게 배분하여 중앙 정렬 보장 */
         .nav-left, .nav-center, .nav-right {
             flex: 1;
             display: flex;
@@ -49,10 +48,8 @@
         .nav-center { justify-content: center; }
         .nav-right { justify-content: flex-end; gap: 25px; }
 
-        /* 로고 스타일 */
         .main-logo { width: 50px; height: auto; cursor: pointer; pointer-events: auto !important; }
 
-        /* 필터/소팅 스타일 */
         .filter-container { display: flex; gap: 20px; }
         .filter-btn {
             background: none; border: none;
@@ -63,29 +60,44 @@
         }
         .filter-btn.active, .filter-btn:hover { opacity: 1; }
 
-        /* 통합 스위치 스타일 (중앙 배치용) */
+        /* --- 스위치 스타일 (이미지 기반 수정) --- */
         .view-switch-wrapper {
-            display: flex; align-items: center; gap: 10px; cursor: pointer;
+            display: flex; 
+            flex-direction: column; /* 세로 배치: 글자를 위로 */
+            align-items: center; 
+            gap: 8px; 
+            cursor: pointer;
         }
         .switch-label {
-            font-size: 0.6rem; letter-spacing: 0.1em; color: var(--accent-color);
-            opacity: 0.5; transition: opacity 0.3s;
+            font-size: 0.65rem; 
+            letter-spacing: 0.05em; 
+            color: var(--accent-color);
+            font-family: 'Garamond', serif;
+            text-transform: capitalize; /* 첫 글자만 대문자 */
         }
         .switch-track {
-            width: 30px; height: 15px; background-color: #eee;
-            border-radius: 15px; position: relative; transition: background-color 0.3s;
+            width: 36px; 
+            height: 18px; 
+            background-color: #fff; 
+            border: 2px solid #000; /* 검은색 테두리 */
+            border-radius: 20px; 
+            position: relative; 
+            transition: all 0.3s;
         }
         .switch-thumb {
-            width: 11px; height: 11px; background-color: #fff;
-            border-radius: 50%; position: absolute; top: 2px; left: 2px;
+            width: 12px; 
+            height: 12px; 
+            background-color: #000; /* 검은색 버튼 */
+            border-radius: 50%; 
+            position: absolute; 
+            top: 3px; 
+            left: 3px;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-        .view-switch-wrapper.on .switch-track { background-color: var(--accent-color); }
-        .view-switch-wrapper.on .switch-thumb { transform: translateX(15px); }
-        .view-switch-wrapper.on .switch-label { opacity: 1; font-weight: bold; }
+        /* 스위치 On 상태 */
+        .view-switch-wrapper.on .switch-thumb { transform: translateX(18px); }
 
-        /* --- 로딩 --- */
+        /* --- 로딩 및 기타 레이아웃 --- */
         .loading-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
@@ -102,7 +114,6 @@
         .loading-wrap img:nth-child(4) { animation-delay: 0.9s; }
         .is-complete .loading-overlay { opacity: 0; visibility: hidden; }
 
-        /* --- 워크 컨테이너 --- */
         .work-container {
             width: 100%; max-width: 1400px; margin: 0 auto;
             padding: 200px 40px; box-sizing: border-box;
@@ -146,7 +157,7 @@
             color: #1a1a1a; margin: 0; text-align: center;
         }
 
-        /* --- 배치 설정 --- */
+        /* --- 그리드 배치 --- */
         .item-1 { grid-column: 3 / 7; margin-top: 40px; } .item-1 .img-box { aspect-ratio: 16 / 10; }
         .item-2 { grid-column: 9 / 12; margin-top: 70px; } .item-2 .img-box { aspect-ratio: 1 / 1; }
         .item-3 { grid-column: 2 / 6; margin-top: -90px; } .item-3 .img-box { aspect-ratio: 1 / 1; }
@@ -154,12 +165,11 @@
         .item-5 { grid-column: 3 / 9; margin-top: -30px; } .item-5 .img-box { aspect-ratio: 4 / 1.8; }
         .item-6 { grid-column: 7 / 12; margin-top: 40px; } .item-6 .img-box { aspect-ratio: 4 / 3; }
 
-        /* 모바일 대응 (화면이 좁아질 경우) */
+        /* 모바일 대응 */
         @media (max-width: 768px) {
             .header-nav { padding: 0 20px; top: 20px; }
             .nav-right { gap: 10px; }
-            .filter-container { gap: 10px; }
-            .filter-btn { font-size: 0.5rem; }
+            .filter-btn { font-size: 0.5rem; letter-spacing: 0.05em; }
             .work-container { padding-top: 150px; gap: 80px 20px; }
         }
     </style>
@@ -180,7 +190,7 @@
         
         <div class="nav-center">
             <div class="view-switch-wrapper" id="view-toggle">
-                <span class="switch-label">PREVIEW</span>
+                <span class="switch-label">Preview</span>
                 <div class="switch-track">
                     <div class="switch-thumb"></div>
                 </div>
@@ -207,7 +217,6 @@
                 <h2>Arco Art Library-Architectural Renovation</h2>
             </a>
         </section>
-
         <section class="work-item item-2" data-category="furniture">
             <a href="project02.html">
                 <div class="img-box">
@@ -217,7 +226,6 @@
                 <h2>On the ceiling</h2>
             </a>
         </section>
-
         <section class="work-item item-3" data-category="jewelry">
             <a href="project03.html">
                 <div class="img-box">
@@ -227,7 +235,6 @@
                 <h2>Ornament is sublime</h2>
             </a>
         </section>
-
         <section class="work-item item-4" data-category="architecture">
             <a href="project04.html">
                 <div class="img-box">
@@ -237,7 +244,6 @@
                 <h2>Sliding Library</h2>
             </a>
         </section>
-
         <section class="work-item item-5" data-category="architecture">
             <a href="project05.html">
                 <div class="img-box">
@@ -247,7 +253,6 @@
                 <h2>Suwon crafting village</h2>
             </a>
         </section>
-
         <section class="work-item item-6" data-category="furniture">
             <a href="project06.html">
                 <div class="img-box">
@@ -260,14 +265,14 @@
     </div>
 
     <script>
-        // 1. 로딩 제어
+        // 로딩 제어
         window.addEventListener('load', function() {
             setTimeout(() => {
                 document.body.classList.replace('is-loading', 'is-complete');
             }, 1500);
         });
 
-        // 2. 필터링 로직
+        // 필터링 로직
         const filterBtns = document.querySelectorAll('.filter-btn');
         const workItems = document.querySelectorAll('.work-item');
         const workGrid = document.getElementById('work-grid');
@@ -289,24 +294,19 @@
             });
         });
 
-        // 3. 통합 이미지 전환 스위치 로직
+        // 스위치 로직
         const viewToggle = document.getElementById('view-toggle');
         viewToggle.addEventListener('click', function() {
             this.classList.toggle('on');
             workGrid.classList.toggle('mode-preview');
         });
 
-        // 4. 모바일 터치 대응
+        // 모바일 터치
         workItems.forEach(item => {
             item.addEventListener('touchstart', function() {
                 this.classList.add('is-active');
             }, {passive: true});
-
             item.addEventListener('touchend', function() {
-                this.classList.remove('is-active');
-            });
-
-            item.addEventListener('touchcancel', function() {
                 this.classList.remove('is-active');
             });
         });
