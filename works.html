@@ -1,427 +1,212 @@
-
 <!DOCTYPE html>
-
 <html lang="ko">
-
 <head>
-
     <meta charset="UTF-8">
-
     <title>Portfolio - Work Snap</title>
-
     <style>
-
         :root {
-
             --reveal-speed: 1s;
-
             --page-transition: 0.8s;
-
         }
-
-
 
         body, html {
-
             margin: 0; padding: 0;
-
             width: 100%; height: 100%;
-
             background-color: #ffffff;
-
             font-family: 'Garamond', serif;
-
             overflow-y: auto; overflow-x: hidden;
-
             -webkit-user-select: none; user-select: none;
-
         }
-
-
 
         img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
 
-
-
         /* --- 로고 및 로딩 --- */
-
         .logo-container {
-
             position: fixed; top: 40px; left: 40px; z-index: 1000;
-
             opacity: 0; transition: opacity 0.6s ease;
-
         }
-
         .main-logo { width: 50px; height: auto; cursor: pointer; pointer-events: auto !important; }
 
-
-
         .loading-overlay {
-
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-
             display: flex; justify-content: center; align-items: center;
-
             z-index: 2000; background-color: #ffffff;
-
             transition: opacity 0.5s ease, visibility 0.5s ease;
-
         }
-
         .loading-wrap { display: flex; gap: 0; align-items: center; }
-
         .loading-wrap img { width: 150px; height: auto; margin: 0 -40px; opacity: 0; }
-
         .is-loading .loading-wrap img { animation: wave 1.2s infinite ease-in-out; }
-
         @keyframes wave { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
-
         .loading-wrap img:nth-child(1) { animation-delay: 0.0s; }
-
         .loading-wrap img:nth-child(2) { animation-delay: 0.3s; }
-
         .loading-wrap img:nth-child(3) { animation-delay: 0.6s; }
-
         .loading-wrap img:nth-child(4) { animation-delay: 0.9s; }
-
         .is-complete .loading-overlay { opacity: 0; visibility: hidden; }
-
         .is-complete .logo-container { opacity: 1; }
 
-
-
         /* --- 필터/소팅 UI --- */
-
         .filter-container {
-
             position: fixed; top: 45px; right: 40px; z-index: 1000;
-
             display: flex; gap: 20px; opacity: 0;
-
             transition: opacity 0.6s ease 0.5s;
-
         }
-
         .is-complete .filter-container { opacity: 1; }
 
-
-
         .filter-btn {
-
             background: none; border: none;
-
             font-family: 'Garamond', serif; font-size: 0.65rem;
-
             letter-spacing: 0.15em; color: #1a1a1a;
-
             cursor: pointer; padding: 0; opacity: 0.4;
-
             transition: opacity 0.3s ease;
-
         }
-
         .filter-btn.active, .filter-btn:hover { opacity: 1; }
 
-
-
         /* --- 워크 컨테이너 --- */
-
         .work-container {
-
             width: 100%; max-width: 1400px; margin: 0 auto;
-
             padding: 200px 40px; box-sizing: border-box;
-
             display: grid; grid-template-columns: repeat(12, 1fr);
-
             gap: 160px 40px; opacity: 0; transform: translateY(30px);
-
             transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
-
         }
-
         .is-complete .work-container { opacity: 1; visibility: visible; transform: translateY(0); }
 
-
-
         /* --- 워크 아이템 공통 및 링크 스타일 --- */
-
         .work-item { 
-
             display: flex; flex-direction: column; position: relative; cursor: pointer;
-
             transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
-
         }
-
-        /* 링크가 레이아웃을 해치지 않게 설정 */
-
         .work-item a { text-decoration: none; color: inherit; display: contents; }
 
-
-
         .work-item.hidden {
-
             opacity: 0; visibility: hidden;
-
             transform: translateY(20px) scale(0.95);
-
             pointer-events: none; position: absolute;
-
         }
-
-
 
         .img-box { 
-
-            width: 100%; background-color: #000000; margin-bottom: 15px; 
-
+            width: 100%; background-color: #f0f0f0; margin-bottom: 15px; 
             opacity: 1; overflow: hidden; position: relative;
-
             transition: opacity 0.4s ease, transform 0.2s ease;
-
         }
-
         .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        .img-box::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; background: rgba(0,0,0,0); }
+        /* 호버 효과: 이미지가 살짝 흐려지며 제목에 집중되도록 설정 */
+        .work-item:hover .img-box { opacity: 0.7; }
+        .work-item:active .img-box { transform: scale(1.02); opacity: 1; }
 
-
-
-        /* 호버 효과 */
-
-        .work-item:hover .img-box { opacity: 0.05; }
-
-        .work-item:active .img-box { transform: scale(1.05); opacity: 1; }
-
-
-
+        /* --- 제목 상시 노출 설정 --- */
         .work-item h2 { 
-
             font-weight: normal; font-size: 0.55rem; letter-spacing: 0.2em; 
-
             color: #1a1a1a; margin: 0; text-align: center;
-
-            opacity: 0; transform: translateY(5px);
-
+            opacity: 1;               /* 항상 보이게 수정 */
+            transform: translateY(0);  /* 원래 위치에 고정 */
             transition: all 0.4s ease;
-
         }
 
-        .work-item:hover h2 { opacity: 1; transform: translateY(0); }
-
-
-
         /* 배치 설정 (그리드 레이아웃) */
-
         .item-1 { grid-column: 3 / 7; margin-top: 40px; } .item-1 .img-box { aspect-ratio: 16 / 10; }
-
         .item-2 { grid-column: 9 / 12; margin-top: 70px; } .item-2 .img-box { aspect-ratio: 1 / 1; }
-
         .item-3 { grid-column: 2 / 6; margin-top: -90px; } .item-3 .img-box { aspect-ratio: 1 / 1; }
-
         .item-4 { grid-column: 8 / 11; margin-top: -30px; } .item-4 .img-box { aspect-ratio: 2 / 3; }
-
         .item-5 { grid-column: 3 / 9; margin-top: -30px; } .item-5 .img-box { aspect-ratio: 4 / 1.8; }
-
         .item-6 { grid-column: 7 / 12; margin-top: 40px; } .item-6 .img-box { aspect-ratio: 4 / 3; }
-
-        .item-7 { grid-column: 2 / 7; margin-top: 20px; } .item-6 .img-box { aspect-ratio: 4 / 3; }
-
     </style>
-
 </head>
-
 <body class="is-loading" oncontextmenu="return false">
 
-
-
     <div class="loading-overlay">
-
         <div class="loading-wrap">
-
             <img src="loading1.png" alt="L1"><img src="loading2.png" alt="L2">
-
             <img src="loading3.png" alt="L3"><img src="loading4.png" alt="L4">
-
         </div>
-
     </div>
-
-
 
     <div class="filter-container">
-
         <button class="filter-btn active" data-filter="all">ALL</button>
-
         <button class="filter-btn" data-filter="architecture">ARCHITECTURE</button>
-
         <button class="filter-btn" data-filter="jewelry">JEWELRY</button>
-
         <button class="filter-btn" data-filter="furniture">FURNITURE</button>
-
     </div>
-
-
 
     <div class="logo-container">
-
         <a href="index.html"><img src="logo.png" class="main-logo" alt="Logo"></a>
-
     </div>
-
-
 
     <div class="work-container">
-
         <section class="work-item item-1" data-category="architecture">
-
             <a href="project01.html">
-
                 <div class="img-box"><img src="main.jpg" alt="Arco Art Library"></div>
-
                 <h2>Arco Art Library-Architectural Renovation</h2>
-
             </a>
-
         </section>
-
-
 
         <section class="work-item item-2" data-category="furniture">
-
             <a href="project02.html">
-
                 <div class="img-box"><img src="LZ_main.jpg" alt="On the ceiling"></div>
-
                 <h2>On the ceiling</h2>
-
             </a>
-
         </section>
 
-
-
-        <section class="work-item item-3" data-category="JEWELRY">
-
+        <section class="work-item item-3" data-category="jewelry">
             <a href="project03.html">
-
                 <div class="img-box"><img src="or_main.jpg" alt="Ornament is sublime"></div>
-
                 <h2>Ornament is sublime</h2>
-
             </a>
-
         </section>
-
-
 
         <section class="work-item item-4" data-category="architecture">
-
             <a href="project04.html">
-
                 <div class="img-box"><img src="발명제안서 렌더 바탕 50투명도.png" alt="Sliding Library"></div>
-
                 <h2>Sliding Library</h2>
-
             </a>
-
         </section>
-
-
 
         <section class="work-item item-5" data-category="architecture">
-
             <a href="project05.html">
-
                 <div class="img-box"><img src="mainshot.jpg" alt="Suwon crafting village"></div>
-
                 <h2>Suwon crafting village</h2>
-
             </a>
-
         </section>
-
-
 
         <section class="work-item item-6" data-category="furniture">
-
             <a href="project06.html">
-
-                <div class="img-box"></div>
-
+                <div class="img-box"><img src="path_to_your_image.jpg" alt="Minimalist Desk"></div>
                 <h2>06. MINIMALIST DESK</h2>
-
             </a>
-
         </section>
-
     </div>
 
-
-
     <script>
-
         // 로딩 제어
-
         window.addEventListener('load', function() {
-
             setTimeout(() => {
-
                 document.body.classList.replace('is-loading', 'is-complete');
-
             }, 1500);
-
         });
-
-
 
         // 소팅(필터링) 로직
-
         const filterBtns = document.querySelectorAll('.filter-btn');
-
         const workItems = document.querySelectorAll('.work-item');
 
-
-
         filterBtns.forEach(btn => {
-
             btn.addEventListener('click', () => {
-
                 filterBtns.forEach(b => b.classList.remove('active'));
-
                 btn.classList.add('active');
 
-
-
-                const filterValue = btn.getAttribute('data-filter');
-
-
+                const filterValue = btn.getAttribute('data-filter').toLowerCase();
 
                 workItems.forEach(item => {
-
-                    const category = item.getAttribute('data-category');
-
+                    const category = item.getAttribute('data-category').toLowerCase();
                     if (filterValue === 'all' || filterValue === category) {
-
                         item.classList.remove('hidden');
-
                     } else {
-
                         item.classList.add('hidden');
-
                     }
-
                 });
-
             });
-
         });
-
     </script>
-
 </body>
-
 </html>
 
