@@ -16,6 +16,8 @@
             font-family: 'Garamond', serif;
             overflow-y: auto; overflow-x: hidden;
             -webkit-user-select: none; user-select: none;
+            /* 모바일에서 길게 누를 때 시스템 메뉴가 뜨는 것을 방지 */
+            -webkit-touch-callout: none;
         }
 
         img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
@@ -84,7 +86,7 @@
             pointer-events: none; position: absolute;
         }
 
-        /* --- [수정 부분] 이미지 박스 및 호버 효과 --- */
+        /* --- 이미지 박스 및 호버 효과 --- */
         .img-box { 
             width: 100%; background-color: #f0f0f0; margin-bottom: 15px; 
             overflow: hidden; position: relative;
@@ -93,28 +95,26 @@
         
         .img-box img { 
             width: 100%; height: 100%; object-fit: cover; display: block; 
-            transition: opacity 0.5s ease; /* 이미지 교체 시 부드러운 효과 */
+            transition: opacity 0.5s ease;
         }
 
-        /* 호버 시 나타날 이미지 (기본적으로 숨김) */
         .img-box img.hover-img {
-            position: absolute;
-            top: 0; left: 0;
-            opacity: 0;
+            position: absolute; top: 0; left: 0; opacity: 0;
         }
 
-        /* 마우스를 올렸을 때의 변화 */
-        .work-item:hover .img-box img.main-img { opacity: 0; }
-        .work-item:hover .img-box img.hover-img { opacity: 1; }
-        .work-item:active .img-box { transform: scale(1.02); }
+        /* [수정] PC 호버 및 모바일 활성화(.is-active) 상태 공통 적용 */
+        .work-item:hover .img-box img.main-img,
+        .work-item.is-active .img-box img.main-img { opacity: 0; }
 
-        /* --- [수정 부분] 제목 상시 노출 --- */
+        .work-item:hover .img-box img.hover-img,
+        .work-item.is-active .img-box img.hover-img { opacity: 1; }
+
+        /* --- 제목 상시 노출 --- */
         .work-item h2 { 
             font-weight: normal; font-size: 0.55rem; letter-spacing: 0.2em; 
             color: #1a1a1a; margin: 0; text-align: center;
-            opacity: 1; /* 상시 노출 */
-            transform: translateY(0); /* 이동 효과 제거 */
-            transition: color 0.3s ease;
+            opacity: 1; 
+            transform: translateY(0);
         }
 
         /* --- 배치 설정 --- */
@@ -151,7 +151,8 @@
             <a href="project01.html">
                 <div class="img-box">
                     <img src="main.jpg" class="main-img" alt="Arco Art Library">
-                    <img src="main_hover.jpg" class="hover-img" alt="Hover Image"> </div>
+                    <img src="main_hover.jpg" class="hover-img" alt="Hover Image">
+                </div>
                 <h2>Arco Art Library-Architectural Renovation</h2>
             </a>
         </section>
@@ -180,7 +181,7 @@
             <a href="project04.html">
                 <div class="img-box">
                     <img src="발명제안서 렌더 바탕 50투명도.png" class="main-img" alt="Sliding Library">
-                    <img src="main.jpg" class="hover-img" alt="Hover Image">
+                    <img src="project04_hover.png" class="hover-img" alt="Hover Image">
                 </div>
                 <h2>Sliding Library</h2>
             </a>
@@ -208,12 +209,14 @@
     </div>
 
     <script>
+        // 로딩 제어
         window.addEventListener('load', function() {
             setTimeout(() => {
                 document.body.classList.replace('is-loading', 'is-complete');
             }, 1500);
         });
 
+        // 필터링 로직
         const filterBtns = document.querySelectorAll('.filter-btn');
         const workItems = document.querySelectorAll('.work-item');
 
@@ -221,7 +224,6 @@
             btn.addEventListener('click', () => {
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-
                 const filterValue = btn.getAttribute('data-filter').toLowerCase();
 
                 workItems.forEach(item => {
@@ -234,7 +236,23 @@
                 });
             });
         });
+
+        // [수정] 모바일 터치(누르고 있기) 대응 로직
+        workItems.forEach(item => {
+            // 손가락을 대는 순간 이미지 바뀜
+            item.addEventListener('touchstart', function() {
+                this.classList.add('is-active');
+            }, {passive: true});
+
+            // 손가락을 떼거나 화면 밖으로 나가면 다시 원래대로
+            item.addEventListener('touchend', function() {
+                this.classList.remove('is-active');
+            });
+
+            item.addEventListener('touchcancel', function() {
+                this.classList.remove('is-active');
+            });
+        });
     </script>
 </body>
 </html>
-
