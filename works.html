@@ -2,20 +2,30 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio - Work Snap</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --reveal-speed: 1s;
             --page-transition: 0.8s;
+            /* 전역 서체 설정 */
+            --main-font: 'EB Garamond', serif;
         }
 
         body, html {
             margin: 0; padding: 0;
             width: 100%; height: 100%;
             background-color: #ffffff;
-            font-family: 'Garamond', serif;
+            font-family: var(--main-font);
             overflow-y: auto; overflow-x: hidden;
             -webkit-user-select: none; user-select: none;
+            /* 모바일 텍스트 크기 보정 */
+            -webkit-text-size-adjust: 100%;
         }
 
         img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
@@ -36,11 +46,13 @@
         .loading-wrap { display: flex; gap: 0; align-items: center; }
         .loading-wrap img { width: 150px; height: auto; margin: 0 -40px; opacity: 0; }
         .is-loading .loading-wrap img { animation: wave 1.2s infinite ease-in-out; }
+        
         @keyframes wave { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
         .loading-wrap img:nth-child(1) { animation-delay: 0.0s; }
         .loading-wrap img:nth-child(2) { animation-delay: 0.3s; }
         .loading-wrap img:nth-child(3) { animation-delay: 0.6s; }
         .loading-wrap img:nth-child(4) { animation-delay: 0.9s; }
+        
         .is-complete .loading-overlay { opacity: 0; visibility: hidden; }
         .is-complete .logo-container { opacity: 1; }
 
@@ -54,7 +66,7 @@
 
         .filter-btn {
             background: none; border: none;
-            font-family: 'Garamond', serif; font-size: 0.65rem;
+            font-family: var(--main-font); font-size: 0.65rem;
             letter-spacing: 0.15em; color: #1a1a1a;
             cursor: pointer; padding: 0; opacity: 0.4;
             transition: opacity 0.3s ease;
@@ -71,7 +83,7 @@
         }
         .is-complete .work-container { opacity: 1; visibility: visible; transform: translateY(0); }
 
-        /* --- 워크 아이템 공통 및 링크 스타일 --- */
+        /* --- 워크 아이템 스타일 --- */
         .work-item { 
             display: flex; flex-direction: column; position: relative; cursor: pointer;
             transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
@@ -91,26 +103,55 @@
         }
         .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-        /* 호버 효과: 이미지가 살짝 흐려지며 제목에 집중되도록 설정 */
         .work-item:hover .img-box { opacity: 0.7; }
         .work-item:active .img-box { transform: scale(1.02); opacity: 1; }
 
-        /* --- 제목 상시 노출 설정 --- */
         .work-item h2 { 
-            font-weight: normal; font-size: 0.8rem; letter-spacing: 0.2em; 
+            font-family: var(--main-font);
+            font-weight: 400; font-size: 0.85rem; letter-spacing: 0.1em; 
             color: #1a1a1a; margin: 0; text-align: center;
-            opacity: 1;               /* 항상 보이게 수정 */
-            transform: translateY(0);  /* 원래 위치에 고정 */
+            opacity: 1; transform: translateY(0);
             transition: all 0.4s ease;
+            text-transform: uppercase;
         }
 
-        /* 배치 설정 (그리드 레이아웃) */
+        /* 데스크탑 배치 설정 */
         .item-1 { grid-column: 3 / 7; margin-top: 40px; } .item-1 .img-box { aspect-ratio: 16 / 10; }
         .item-2 { grid-column: 9 / 12; margin-top: 70px; } .item-2 .img-box { aspect-ratio: 1 / 1; }
         .item-3 { grid-column: 2 / 6; margin-top: -90px; } .item-3 .img-box { aspect-ratio: 1 / 1; }
         .item-4 { grid-column: 8 / 11; margin-top: -30px; } .item-4 .img-box { aspect-ratio: 2 / 3; }
         .item-5 { grid-column: 3 / 9; margin-top: -30px; } .item-5 .img-box { aspect-ratio: 4 / 1.8; }
-        .item-6 { grid-column: 7 / 12; margin-top: 40px; } .item-6 .img-box { aspect-ratio: 4 / 3; }
+        .item-6, .item-7 { grid-column: 7 / 12; margin-top: 40px; } .item-6 .img-box, .item-7 .img-box { aspect-ratio: 4 / 3; }
+
+        /* --- 📱 모바일 최적화 레이아웃 (768px 미만) --- */
+        @media (max-width: 768px) {
+            .logo-container { top: 25px; left: 25px; }
+            .main-logo { width: 40px; }
+
+            .filter-container { 
+                top: 30px; right: 20px; gap: 12px; 
+                flex-wrap: wrap; justify-content: flex-end; width: 60%;
+            }
+            .filter-btn { font-size: 0.55rem; }
+
+            .work-container {
+                padding: 140px 20px 60px;
+                display: flex; flex-direction: column; /* 세로 일렬 배치 */
+                gap: 50px;
+            }
+
+            .work-item {
+                width: 100% !important; margin: 0 !important;
+            }
+
+            .work-item h2 {
+                font-size: 0.8rem;
+                margin-top: 8px;
+                letter-spacing: 0.05em;
+            }
+            
+            .img-box { margin-bottom: 8px; }
+        }
     </style>
 </head>
 <body class="is-loading" oncontextmenu="return false">
@@ -138,7 +179,7 @@
         <section class="work-item item-1" data-category="architecture">
             <a href="project01.html">
                 <div class="img-box"><img src="main.jpg" alt="Arco Art Library"></div>
-                <h2>Arco Art Library-Architectural Renovation</h2>
+                <h2>Arco Art Library</h2>
             </a>
         </section>
 
@@ -173,14 +214,14 @@
         <section class="work-item item-6" data-category="furniture">
             <a href="project06.html">
                 <div class="img-box"><img src="path_to_your_image.jpg" alt="Minimalist Desk"></div>
-                <h2>06. MINIMALIST DESK</h2>
+                <h2>Minimalist Desk</h2>
             </a>
         </section>
 
-        <section class="work-item item-７" data-category="furniture">
+        <section class="work-item item-7" data-category="furniture">
             <a href="project06.html">
                 <div class="img-box"><img src="path_to_your_image.jpg" alt="Minimalist Desk"></div>
-                <h2>06. MINIMALIST DESK</h2>
+                <h2>Modern Table</h2>
             </a>
         </section>
     </div>
@@ -199,6 +240,7 @@
 
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
+                // 활성 버튼 스타일 변경
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
 
@@ -208,8 +250,16 @@
                     const category = item.getAttribute('data-category').toLowerCase();
                     if (filterValue === 'all' || filterValue === category) {
                         item.classList.remove('hidden');
+                        // 필터링 후 레이아웃 깨짐 방지를 위해 위치 재조정 효과
+                        item.style.position = 'relative'; 
                     } else {
                         item.classList.add('hidden');
+                        // 숨겨진 아이템은 공간을 차지하지 않도록 설정
+                        setTimeout(() => {
+                            if(item.classList.contains('hidden')) {
+                                item.style.position = 'absolute';
+                            }
+                        }, 500);
                     }
                 });
             });
@@ -217,6 +267,3 @@
     </script>
 </body>
 </html>
-
-
-
