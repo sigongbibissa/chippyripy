@@ -24,16 +24,16 @@
             color: var(--accent-color);
         }
 
-        /* --- 링크 스타일: 파란색 및 밑줄 완전 제거 --- */
+        /* --- 링크 스타일: 파란색 및 밑줄 제거 --- */
         a, a:link, a:visited, a:hover, a:active {
-            text-decoration: none !important; /* 밑줄 제거 */
-            color: #1a1a1a !important; /* 모든 상태에서 검은색 유지 */
+            text-decoration: none !important;
+            color: #1a1a1a !important;
             outline: none;
         }
 
         img { -webkit-user-drag: none; user-drag: none; pointer-events: none; }
 
-        /* --- 상단 고정 헤더: 배경 제거 (뿌연 느낌 삭제) --- */
+        /* --- 상단 고정 헤더: 배경 투명 (뿌연 느낌 삭제) --- */
         .fixed-header {
             position: fixed;
             top: 40px;
@@ -47,13 +47,11 @@
             box-sizing: border-box;
             opacity: 0;
             transition: opacity 0.6s ease 0.5s;
-            background-color: transparent; /* 배경을 투명하게 설정 */
-            pointer-events: none; /* 헤더 빈 영역이 클릭을 방해하지 않도록 설정 */
+            background-color: transparent;
+            pointer-events: none; /* 빈 공간 클릭 통과 */
         }
         .is-complete .fixed-header { opacity: 1; }
-
-        /* 로고와 메뉴 버튼은 클릭 가능해야 함 */
-        .nav-left, .nav-right { pointer-events: auto; }
+        .nav-left, .nav-right { pointer-events: auto; } /* 로고와 메뉴는 클릭 가능 */
 
         .main-logo { width: 50px; height: auto; cursor: pointer; }
 
@@ -71,7 +69,7 @@
         /* --- 스크롤되는 본문 영역 --- */
         .scroll-section {
             width: 100%;
-            padding-top: 150px; /* 상단 메뉴와의 기본 간격 */
+            padding-top: 150px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -86,7 +84,7 @@
             justify-content: center;
         }
 
-        /* 회색 스위치 디자인 + 상하 배치 */
+        /* 회색 스위치 디자인 */
         .view-switch-wrapper {
             display: flex; 
             flex-direction: column; 
@@ -102,52 +100,47 @@
             opacity: 0.6;
         }
         .switch-track {
-            width: 32px; 
-            height: 16px; 
+            width: 32px; height: 16px; 
             background-color: #eee;
-            border-radius: 15px; 
-            position: relative; 
-            transition: background-color 0.3s;
+            border-radius: 15px; position: relative; transition: background-color 0.3s;
         }
         .switch-thumb {
-            width: 12px; 
-            height: 12px; 
+            width: 12px; height: 12px; 
             background-color: #fff;
-            border-radius: 50%; 
-            position: absolute; 
-            top: 2px; 
-            left: 2px;
+            border-radius: 50%; position: absolute; top: 2px; left: 2px;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
-        
         .view-switch-wrapper.on .switch-track { background-color: var(--accent-color); }
         .view-switch-wrapper.on .switch-thumb { transform: translateX(16px); }
         .view-switch-wrapper.on .switch-label { opacity: 1; font-weight: bold; }
 
-        /* --- 워크 그리드 --- */
+        /* --- 워크 아이템 및 이미지 전환 로직 --- */
         .work-container {
             width: 100%; max-width: 1400px; margin: 0 auto;
-            padding: 0 40px 100px;
-            box-sizing: border-box;
+            padding: 0 40px 100px; box-sizing: border-box;
             display: grid; grid-template-columns: repeat(12, 1fr);
             gap: 160px 40px;
-        }
-
-        .work-item h2 { 
-            font-family: var(--main-font);
-            font-weight: normal; font-size: 0.65rem; letter-spacing: 0.2em; 
-            color: #1a1a1a;
-            margin: 0; text-align: center;
         }
 
         .work-item { display: flex; flex-direction: column; position: relative; cursor: pointer; }
         .img-box { width: 100%; background-color: #fcfcfc; margin-bottom: 15px; overflow: hidden; position: relative; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; transition: opacity 0.6s ease; }
         .img-box img.hover-img { position: absolute; top: 0; left: 0; opacity: 0; }
-        
-        .work-item:hover .img-box img.main-img, .work-container.mode-preview .main-img { opacity: 0; }
-        .work-item:hover .img-box img.hover-img, .work-container.mode-preview .hover-img { opacity: 1; }
+
+        /* [핵심] PC 호버, 모바일 터치, 프리뷰 모드 모두 대응 */
+        .work-item:hover .img-box img.main-img, 
+        .work-item.is-active .img-box img.main-img, 
+        .work-container.mode-preview .main-img { opacity: 0; }
+
+        .work-item:hover .img-box img.hover-img, 
+        .work-item.is-active .img-box img.hover-img, 
+        .work-container.mode-preview .hover-img { opacity: 1; }
+
+        .work-item h2 { 
+            font-family: var(--main-font); font-weight: normal; font-size: 0.65rem; 
+            letter-spacing: 0.2em; color: #1a1a1a; margin: 0; text-align: center;
+        }
 
         /* 그리드 배치 */
         .item-1 { grid-column: 3 / 7; margin-top: 40px; } .item-1 .img-box { aspect-ratio: 16 / 10; }
@@ -157,7 +150,7 @@
         .item-5 { grid-column: 3 / 9; margin-top: -30px; } .item-5 .img-box { aspect-ratio: 4 / 1.8; }
         .item-6 { grid-column: 7 / 12; margin-top: 40px; } .item-6 .img-box { aspect-ratio: 4 / 3; }
 
-        /* 로딩 애니메이션 */
+        /* 로딩 애니메이션 생략 (이전과 동일) */
         .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; z-index: 2000; background-color: #ffffff; transition: opacity 0.5s ease, visibility 0.5s ease; }
         .loading-wrap { display: flex; gap: 0; align-items: center; }
         .loading-wrap img { width: 150px; height: auto; margin: 0 -40px; opacity: 0; }
@@ -249,11 +242,11 @@
             setTimeout(() => { document.body.classList.replace('is-loading', 'is-complete'); }, 1200);
         });
 
-        // 필터링
         const filterBtns = document.querySelectorAll('.filter-btn');
         const workItems = document.querySelectorAll('.work-item');
         const workGrid = document.getElementById('work-grid');
 
+        // 필터링
         filterBtns.forEach(btn => {
             btn.addEventListener('click', () => {
                 filterBtns.forEach(b => b.classList.remove('active'));
@@ -275,6 +268,25 @@
         viewToggle.addEventListener('click', function() {
             this.classList.toggle('on');
             workGrid.classList.toggle('mode-preview');
+        });
+
+        /* --- [모바일 터치 대응 수정] --- */
+        workItems.forEach(item => {
+            // 손가락이 닿는 순간 'is-active' 클래스 추가
+            item.addEventListener('touchstart', function() {
+                this.classList.add('is-active');
+            }, {passive: true});
+
+            // 손가락을 떼거나 터치가 취소될 때 클래스 제거
+            item.addEventListener('touchend', function() {
+                setTimeout(() => {
+                    this.classList.remove('is-active');
+                }, 300); // 0.3초 정도 이미지를 보여준 후 복구
+            });
+
+            item.addEventListener('touchcancel', function() {
+                this.classList.remove('is-active');
+            });
         });
     </script>
 </body>
