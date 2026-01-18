@@ -71,12 +71,11 @@
         }
         .is-complete .work-container { opacity: 1; visibility: visible; transform: translateY(0); }
 
-        /* --- 워크 아이템 공통 및 링크 스타일 --- */
+        /* --- 워크 아이템 공통 --- */
         .work-item { 
             display: flex; flex-direction: column; position: relative; cursor: pointer;
             transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
         }
-        /* 링크가 레이아웃을 해치지 않게 설정 */
         .work-item a { text-decoration: none; color: inherit; display: contents; }
 
         .work-item.hidden {
@@ -85,34 +84,46 @@
             pointer-events: none; position: absolute;
         }
 
+        /* --- [수정 부분] 이미지 박스 및 호버 효과 --- */
         .img-box { 
-            width: 100%; background-color: #000000; margin-bottom: 15px; 
-            opacity: 1; overflow: hidden; position: relative;
-            transition: opacity 0.4s ease, transform 0.2s ease;
+            width: 100%; background-color: #f0f0f0; margin-bottom: 15px; 
+            overflow: hidden; position: relative;
+            transition: transform 0.3s ease;
         }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .img-box::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; background: rgba(0,0,0,0); }
+        
+        .img-box img { 
+            width: 100%; height: 100%; object-fit: cover; display: block; 
+            transition: opacity 0.5s ease; /* 이미지 교체 시 부드러운 효과 */
+        }
 
-        /* 호버 효과 */
-        .work-item:hover .img-box { opacity: 0.05; }
-        .work-item:active .img-box { transform: scale(1.05); opacity: 1; }
+        /* 호버 시 나타날 이미지 (기본적으로 숨김) */
+        .img-box img.hover-img {
+            position: absolute;
+            top: 0; left: 0;
+            opacity: 0;
+        }
 
+        /* 마우스를 올렸을 때의 변화 */
+        .work-item:hover .img-box img.main-img { opacity: 0; }
+        .work-item:hover .img-box img.hover-img { opacity: 1; }
+        .work-item:active .img-box { transform: scale(1.02); }
+
+        /* --- [수정 부분] 제목 상시 노출 --- */
         .work-item h2 { 
             font-weight: normal; font-size: 0.55rem; letter-spacing: 0.2em; 
             color: #1a1a1a; margin: 0; text-align: center;
-            opacity: 0; transform: translateY(5px);
-            transition: all 0.4s ease;
+            opacity: 1; /* 상시 노출 */
+            transform: translateY(0); /* 이동 효과 제거 */
+            transition: color 0.3s ease;
         }
-        .work-item:hover h2 { opacity: 1; transform: translateY(0); }
 
-        /* 배치 설정 (그리드 레이아웃) */
+        /* --- 배치 설정 --- */
         .item-1 { grid-column: 3 / 7; margin-top: 40px; } .item-1 .img-box { aspect-ratio: 16 / 10; }
         .item-2 { grid-column: 9 / 12; margin-top: 70px; } .item-2 .img-box { aspect-ratio: 1 / 1; }
         .item-3 { grid-column: 2 / 6; margin-top: -90px; } .item-3 .img-box { aspect-ratio: 1 / 1; }
         .item-4 { grid-column: 8 / 11; margin-top: -30px; } .item-4 .img-box { aspect-ratio: 2 / 3; }
         .item-5 { grid-column: 3 / 9; margin-top: -30px; } .item-5 .img-box { aspect-ratio: 4 / 1.8; }
         .item-6 { grid-column: 7 / 12; margin-top: 40px; } .item-6 .img-box { aspect-ratio: 4 / 3; }
-        .item-7 { grid-column: 2 / 7; margin-top: 20px; } .item-6 .img-box { aspect-ratio: 4 / 3; }
     </style>
 </head>
 <body class="is-loading" oncontextmenu="return false">
@@ -138,56 +149,71 @@
     <div class="work-container">
         <section class="work-item item-1" data-category="architecture">
             <a href="project01.html">
-                <div class="img-box"><img src="main.jpg" alt="Arco Art Library"></div>
+                <div class="img-box">
+                    <img src="main.jpg" class="main-img" alt="Arco Art Library">
+                    <img src="main_hover.jpg" class="hover-img" alt="Hover Image"> </div>
                 <h2>Arco Art Library-Architectural Renovation</h2>
             </a>
         </section>
 
         <section class="work-item item-2" data-category="furniture">
             <a href="project02.html">
-                <div class="img-box"><img src="LZ_main.jpg" alt="On the ceiling"></div>
+                <div class="img-box">
+                    <img src="LZ_main.jpg" class="main-img" alt="On the ceiling">
+                    <img src="LZ_hover.jpg" class="hover-img" alt="Hover Image">
+                </div>
                 <h2>On the ceiling</h2>
             </a>
         </section>
 
-        <section class="work-item item-3" data-category="JEWELRY">
+        <section class="work-item item-3" data-category="jewelry">
             <a href="project03.html">
-                <div class="img-box"><img src="or_main.jpg" alt="Ornament is sublime"></div>
+                <div class="img-box">
+                    <img src="or_main.jpg" class="main-img" alt="Ornament is sublime">
+                    <img src="or_hover.jpg" class="hover-img" alt="Hover Image">
+                </div>
                 <h2>Ornament is sublime</h2>
             </a>
         </section>
 
         <section class="work-item item-4" data-category="architecture">
             <a href="project04.html">
-                <div class="img-box"><img src="발명제안서 렌더 바탕 50투명도.png" alt="Sliding Library"></div>
+                <div class="img-box">
+                    <img src="발명제안서 렌더 바탕 50투명도.png" class="main-img" alt="Sliding Library">
+                    <img src="project04_hover.png" class="hover-img" alt="Hover Image">
+                </div>
                 <h2>Sliding Library</h2>
             </a>
         </section>
 
         <section class="work-item item-5" data-category="architecture">
             <a href="project05.html">
-                <div class="img-box"><img src="mainshot.jpg" alt="Suwon crafting village"></div>
+                <div class="img-box">
+                    <img src="mainshot.jpg" class="main-img" alt="Suwon crafting village">
+                    <img src="mainshot_hover.jpg" class="hover-img" alt="Hover Image">
+                </div>
                 <h2>Suwon crafting village</h2>
             </a>
         </section>
 
         <section class="work-item item-6" data-category="furniture">
             <a href="project06.html">
-                <div class="img-box"></div>
+                <div class="img-box">
+                    <img src="desk_main.jpg" class="main-img" alt="Minimalist Desk">
+                    <img src="desk_hover.jpg" class="hover-img" alt="Hover Image">
+                </div>
                 <h2>06. MINIMALIST DESK</h2>
             </a>
         </section>
     </div>
 
     <script>
-        // 로딩 제어
         window.addEventListener('load', function() {
             setTimeout(() => {
                 document.body.classList.replace('is-loading', 'is-complete');
             }, 1500);
         });
 
-        // 소팅(필터링) 로직
         const filterBtns = document.querySelectorAll('.filter-btn');
         const workItems = document.querySelectorAll('.work-item');
 
@@ -196,10 +222,10 @@
                 filterBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
 
-                const filterValue = btn.getAttribute('data-filter');
+                const filterValue = btn.getAttribute('data-filter').toLowerCase();
 
                 workItems.forEach(item => {
-                    const category = item.getAttribute('data-category');
+                    const category = item.getAttribute('data-category').toLowerCase();
                     if (filterValue === 'all' || filterValue === category) {
                         item.classList.remove('hidden');
                     } else {
@@ -211,56 +237,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
