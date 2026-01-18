@@ -37,9 +37,7 @@
             user-drag: none; 
             pointer-events: none;
             /* 이미지가 데스크탑에서 확대될 때 선명도를 유지하도록 강제 */
-            image-rendering: -webkit-optimize-contrast; /* 크롬, 사파리 */
-            image-rendering: crisp-edges;               /* 파이어폭스 */
-            shape-rendering: geometricPrecision;       /* SVG 선 정밀도 최적화 */
+            image-rendering: auto; /* 크롬, 사파리 * 
         }
 
         /* --- 상단 고정 헤더: 배경 투명 --- */
@@ -284,5 +282,6 @@
     </script>
 </body>
 </html>
+
 
 
