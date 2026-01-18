@@ -113,7 +113,7 @@
             text-transform: uppercase;
         }
 
-        /* 데스크탑 배치 설정 */
+        /* 고정 비대칭 배치 설정 (모든 해상도 공통) */
         .item-1 { grid-column: 3 / 7; margin-top: 40px; } .item-1 .img-box { aspect-ratio: 16 / 10; }
         .item-2 { grid-column: 9 / 12; margin-top: 70px; } .item-2 .img-box { aspect-ratio: 1 / 1; }
         .item-3 { grid-column: 2 / 6; margin-top: -90px; } .item-3 .img-box { aspect-ratio: 1 / 1; }
@@ -121,40 +121,6 @@
         .item-5 { grid-column: 3 / 9; margin-top: -30px; } .item-5 .img-box { aspect-ratio: 4 / 1.8; }
         .item-6 { grid-column: 7 / 12; margin-top: 40px; } .item-6 .img-box { aspect-ratio: 4 / 3; }
 
-        /* --- 📱 모바일 최적화 레이아웃 (768px 미만) - 비대칭 유지 버전 --- */
-        @media (max-width: 768px) {
-            .logo-container { top: 25px; left: 25px; }
-            .main-logo { width: 40px; }
-
-            .filter-container { 
-                top: 30px; right: 20px; gap: 10px; 
-                flex-wrap: wrap; justify-content: flex-end; width: 65%;
-            }
-            .filter-btn { font-size: 0.55rem; }
-
-            .work-container {
-                padding: 140px 15px 60px;
-                display: grid; /* Flex 대신 Grid 유지 */
-                grid-template-columns: repeat(12, 1fr);
-                gap: 80px 15px; /* 세로 간격 조정 */
-            }
-
-            /* 모바일 전용 비대칭 배치 재설정 */
-            .item-1 { grid-column: 1 / 9; margin-top: 20px; }
-            .item-2 { grid-column: 6 / 13; margin-top: 40px; }
-            .item-3 { grid-column: 2 / 8; margin-top: -20px; }
-            .item-4 { grid-column: 7 / 12; margin-top: 0px; }
-            .item-5 { grid-column: 1 / 11; margin-top: 20px; }
-            .item-6 { grid-column: 4 / 13; margin-top: 30px; }
-
-            .work-item h2 {
-                font-size: 0.7rem;
-                margin-top: 8px;
-                letter-spacing: 0.05em;
-            }
-            
-            .img-box { margin-bottom: 8px; }
-        }
     </style>
 </head>
 <body class="is-loading" oncontextmenu="return false">
