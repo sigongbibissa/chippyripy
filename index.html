@@ -35,12 +35,12 @@
             animation: logoReveal 0.8s ease forwards;
         }
 
-        /* --- 🔥 저작권 문구 (추가됨) --- */
+        /* --- 저작권 문구 --- */
         .copyright {
             position: absolute; top: 20px; right: 40px; z-index: 1000;
             font-size: 0.75rem; color: #999; letter-spacing: 0.05em;
             opacity: 0;
-            animation: itemAppear 0.8s ease forwards 1.2s; /* 다른 요소들보다 살짝 늦게 등장 */
+            animation: itemAppear 0.8s ease forwards 1.2s;
             transition: transform 0.3s ease-out, opacity 0.3s ease;
         }
 
@@ -66,30 +66,43 @@
             animation: itemAppear 0.8s ease forwards 1s;
         }
 
-        .minigame-btn:hover { color: var(--accent-color); transform: scale(1.1); }
+        /* -----------------------------------------------------------
+           🔥 인터랙션 제어 (모바일 더블탭 해결 핵심 부분)
+        -------------------------------------------------------------- */
 
-        /* --- 기존 인터랙션 (:has) --- */
-        /* 메뉴 호버 시 저작권 문구도 살짝 투명해지도록 추가 */
-        .page-wrapper:has(.menu-item:hover) .logo-container,
-        .page-wrapper:has(.menu-item:hover) .copyright {
-            transform: scale(0.9);
-            animation: tremble 0.07s infinite;
-            opacity: 0.3;
-        }
-        
-        .page-wrapper:has(.menu-item:hover) .minigame-btn {
-            opacity: 0.15; transform: translateX(-20px); pointer-events: none;
-        }
-        .page-wrapper:has(.menu-item:hover) .menu-item:not(:hover) { 
-            opacity: 0.1; animation: tremble 0.07s infinite; 
-        }
-        .page-wrapper:has(.menu-item:hover) .menu-item.shop:not(:hover) { transform: translateX(-80px); }
-        .page-wrapper:has(.menu-item:hover) .menu-item.works:not(:hover) { transform: translate(80px, -80px); }
-        .page-wrapper:has(.menu-item:hover) .menu-item.about:not(:hover) { transform: translate(80px, 80px); }
+        /* 1. PC 환경 (마우스 포인터가 있는 경우만 호버 애니메이션 작동) */
+        @media (hover: hover) {
+            .page-wrapper:has(.menu-item:hover) .logo-container,
+            .page-wrapper:has(.menu-item:hover) .copyright {
+                transform: scale(0.9);
+                animation: tremble 0.07s infinite;
+                opacity: 0.3;
+            }
+            
+            .page-wrapper:has(.menu-item:hover) .minigame-btn {
+                opacity: 0.15; transform: translateX(-20px); pointer-events: none;
+            }
 
-        .menu-item:hover { 
-            animation: infiniteRotate var(--infinite-speed) linear infinite !important; 
-            opacity: 1 !important; 
+            .page-wrapper:has(.menu-item:hover) .menu-item:not(:hover) { 
+                opacity: 0.1; animation: tremble 0.07s infinite; 
+            }
+
+            .page-wrapper:has(.menu-item:hover) .menu-item.shop:not(:hover) { transform: translateX(-80px); }
+            .page-wrapper:has(.menu-item:hover) .menu-item.works:not(:hover) { transform: translate(80px, -80px); }
+            .page-wrapper:has(.menu-item:hover) .menu-item.about:not(:hover) { transform: translate(80px, 80px); }
+
+            .menu-item:hover { 
+                animation: infiniteRotate var(--infinite-speed) linear infinite !important; 
+                opacity: 1 !important; 
+            }
+
+            .minigame-btn:hover { color: var(--accent-color); transform: scale(1.1); }
+        }
+
+        /* 2. 모바일/터치 환경 (누르고 있을 때 색상만 살짝 변경) */
+        @media (hover: none) {
+            .menu-item:active { color: var(--accent-color); opacity: 0.7; }
+            .minigame-btn:active { color: var(--accent-color); }
         }
 
         /* --- 이스터에그: 우수수 떨어지는 효과 --- */
@@ -132,7 +145,6 @@
         const idleLimit = 10000; // 10초
 
         function triggerEasterEgg() {
-            // 떨어뜨릴 모든 요소 선택 (.copyright 추가됨)
             const targets = document.querySelectorAll('.menu-item, .logo-container, .minigame-btn, .copyright');
             
             targets.forEach((el, index) => {
@@ -155,6 +167,7 @@
             idleTimer = setTimeout(triggerEasterEgg, idleLimit);
         }
 
+        // 마우스 및 터치 이벤트 감지
         ['mousemove', 'mousedown', 'keydown', 'touchstart'].forEach(type => {
             window.addEventListener(type, resetTimer);
         });
@@ -163,8 +176,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
