@@ -18,7 +18,6 @@
             margin: 0; padding: 0;
             width: 100%; height: 100%;
             background-color: #ffffff;
-            /* 2. 폰트 이름을 'EB Garamond'로 수정 */
             font-family: 'EB Garamond', serif; 
             overflow-y: auto; overflow-x: hidden;
             -webkit-user-select: none; user-select: none;
@@ -60,7 +59,6 @@
 
         .filter-btn {
             background: none; border: none;
-            /* 3. 여기도 'EB Garamond'로 수정 */
             font-family: 'EB Garamond', serif; 
             font-size: 0.65rem;
             letter-spacing: 0.15em; color: #1a1a1a;
@@ -69,32 +67,38 @@
         }
         .filter-btn.active, .filter-btn:hover { opacity: 1; }
 
-        /* --- 워크 컨테이너 --- */
+        /* --- 워크 컨테이너 수정 --- */
         .work-container {
-            width: 100%; max-width: 1400px; margin: 0 auto;
-            padding: 200px 40px; box-sizing: border-box;
-            display: grid; grid-template-columns: repeat(12, 1fr);
-            gap: 160px 40px; opacity: 0; transform: translateY(30px);
+            width: 100%; 
+            max-width: 900px; /* 등간격 나열을 위해 컨테이너 폭 조정 */
+            margin: 0 auto;
+            padding: 200px 40px; 
+            box-sizing: border-box;
+            display: flex; 
+            flex-direction: column; /* 세로로 나열 */
+            gap: 150px; /* 아이템 사이의 일정한 간격 */
+            opacity: 0; 
+            transform: translateY(30px);
             transition: opacity 1s ease 0.3s, transform 1s ease 0.3s;
         }
         .is-complete .work-container { opacity: 1; visibility: visible; transform: translateY(0); }
 
-        /* --- 워크 아이템 공통 및 링크 스타일 --- */
+        /* --- 워크 아이템 공통 --- */
         .work-item { 
             display: flex; flex-direction: column; position: relative; cursor: pointer;
+            width: 100%;
             transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
         }
         .work-item a { text-decoration: none; color: inherit; display: contents; }
 
         .work-item.hidden {
-            opacity: 0; visibility: hidden;
-            transform: translateY(20px) scale(0.95);
-            pointer-events: none; position: absolute;
+            display: none; /* 필터링 시 공간을 차지하지 않도록 수정 */
         }
 
         .img-box { 
             width: 100%; background-color: #f0f0f0; margin-bottom: 20px; 
             opacity: 1; overflow: hidden; position: relative;
+            aspect-ratio: 16 / 10; /* 모든 이미지 박스 비율 통일 */
             transition: opacity 0.4s ease, transform 0.2s ease;
         }
         .img-box img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -102,7 +106,6 @@
         .work-item:hover .img-box { opacity: 0.7; }
         .work-item:active .img-box { transform: scale(1.02); opacity: 1; }
 
-        /* --- 제목 설정 (크기 40% 증가) --- */
         .work-item h2 { 
             font-weight: normal; 
             font-size: 0.77rem; 
@@ -111,21 +114,10 @@
             color: #1a1a1a; 
             margin: 0; 
             text-align: center;
-            opacity: 1; 
-            transform: translateY(0);
             transition: all 0.4s ease;
         }
 
-        /* 배치 설정 (그리드 레이아웃) */
-        .item-1 { grid-column: 3 / 12; margin-top: 30px; } .item-1 .img-box { aspect-ratio: 16 / 10; }
-        .item-2 { grid-column: 3 / 12; margin-top: 130px; } .item-2 .img-box { aspect-ratio: 16 / 10; }
-        .item-3 { grid-column: 3 / 12; margin-top: 230px; } .item-3 .img-box { aspect-ratio: 16 / 10; }
-        .item-4 { grid-column: 3 / 12; margin-top: 330px; } .item-4 .img-box { aspect-ratio: 16 / 10; }
-        .item-5 { grid-column: 3 / 12; margin-top: 430px; } .item-5 .img-box { aspect-ratio: 16 / 10; }
-        .item-6 { grid-column: 3 / 12; margin-top: 530px; } .item-6 .img-box { aspect-ratio: 16 / 10; }
-        .item-7 { grid-column: 3 / 12; margin-top: 630px; } .item-7 .img-box { aspect-ratio: 16 / 10; }
-        .item-8 { grid-column: 3 / 12; margin-top: 730px; } .item-8 .img-box { aspect-ratio: 16 / 10; }
-        .item-9 { grid-column: 3 / 12; margin-top: 830px; } .item-9 .img-box { aspect-ratio: 16 / 10; }
+        /* 기존 개별 item-1 ~ item-9 위치 설정 코드 삭제됨 */
         
     </style>
 </head>
@@ -245,9 +237,3 @@
     </script>
 </body>
 </html>
-
-
-
-
-
-
